@@ -1,7 +1,7 @@
 # 하한은 알려진 취약점이 고쳐진 버전 (2026-11 OSV·pip-audit 기준)
 pyyaml>=6.0.1
 pymupdf>=1.26.7
-python-docx>=1.1
+python-docx>=1.2.0
 lxml>=6.1.0            # python-docx 가 쓰는 XML 파서
 # 테스트 양식 회귀 테스트(선택)
 websocket-client>=1.8
