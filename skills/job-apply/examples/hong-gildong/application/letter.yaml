@@ -1,0 +1,18 @@
+title: 홍길동 자기소개서 — 그린데이터 데이터 엔지니어
+output: 홍길동_그린데이터_데이터엔지니어_자기소개서.pdf
+label: 자기소개서
+eyebrow: 자기소개서 · DATA ENGINEER
+subtitle: 그린데이터 지원
+source: final_coverletter.md
+requirements:
+  heading: 자격요건과 경험
+  meta: 공고 요건마다 근거가 되는 경험
+  after_section: 1
+  rows:
+    - {req: Python·SQL 실무 경험, evidence: "출고 지연 알림(Python·WMS DB 조회), 재고 이상치 SQL"}
+    - {req: 데이터 파이프라인 구축, evidence: "창고별 기준 → 지연 건 추출 → 담당자별 알림, 재시도·실행 로그"}
+    - {req: 현업 커뮤니케이션, evidence: "창고 담당자와 지연 기준 정리, 대시보드 이상치 기준 합의"}
+    - {req: Airflow, evidence: "실무 경험 없음 — 스케줄링은 cron 으로 운영", optional: true}
+rail_meta:
+  출고 지연 알림 자동화: 예시물류 · 2024.06–08
+  재고 이상치 대시보드: 예시물류 · 팀(기여도 40%) · 2024.10–12

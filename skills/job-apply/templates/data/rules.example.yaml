@@ -1,0 +1,23 @@
+# 작성 규칙 예시 — 사용자 결정이 생길 때마다 갱신한다
+defaults:
+  scope: 제출 전까지        # 문안 작성 / 입력 및 임시저장 / 제출 전까지 / 최종 제출까지
+  humanize: always          # always / ask / never
+  pdf_check: always
+  register: 합니다체
+  submit: never
+
+language_scores:            # 시험 이름: never / always / include_unless_expired_forbidden
+  TOEIC: include_unless_expired_forbidden
+
+fixed_metrics: []           # - {topic: …, use: "…", why: …}
+exclude_from_resume_and_letter: []
+never_claim_without_new_evidence: []
+
+consent:                    # check / never / ask
+  required: check
+  optional_collection: ask
+  sensitive_required: ask
+  third_party: never
+
+experience_questions:
+  product_trial: ask

@@ -1,0 +1,37 @@
+rows 36, pages 3
+#1 | 이름 | text | 홍길동 | 3
+#2 | 성별 | select | 남성 | 
+#3 | 생년월일 | select | 1999. 03. 15 | 
+#4 | 이메일주소 | text | gildong(at)example[.]com | 19
+#5 | 연락처 | text | 01000000000 | 11
+#6 | 병역사항 | select | 군필 | 
+#7 | 장애여부 | radio | 비대상 | 
+#8 | 보훈여부 | radio | 비대상 | 
+#9 | 고용형태 | select | 정규직 | 
+#10 | 회사명 | text | 주식회사 예시물류 | 9
+#11 | 근무기간 | select | 2024. 03 | 
+#12 | 근무기간 | checks | 재직 중 | 
+#13 | 부서 | text | 운영기획팀 | 5
+#14 | 직급 | text | 사원 | 2
+#15 | 담당업무 | text | 창고별 출고 지연 알림 파이프라인과 … | 50
+#16 | 이력서 | file | 홍길동_그린데이터_데이터엔지니어_이력서.pdf 64609 | 
+#17 | 자기소개서 | file | 홍길동_그린데이터_데이터엔지니어_자기소개서.pdf 58690 | 
+#18 | 포트폴리오 | radio | 파일 | 
+#19 | 포트폴리오 | file |  | 
+#20 | 지원 동기를 적어 주세요. | text | 물류 현장의 반복 조회 업무를 파이프… | 72
+#21 | 지원 분야와 관련된 업무 경험을 적어 주세요. | text | 예시물류에서 Operations Da… | 194
+#22 | 선호하는 관심 분야를 모두 선택해 주세요. | checks | Data pipeline;Analytics | 
+#23 | 코딩테스트 언어를 선택해 주세요. | radio | Python | 
+#24 | 언제부터 합류할 수 있나요_ | text | 협의 후 조정 가능합니다. | 14
+#25 | 어떤 경로로 지원하셨나요_ | text | 회사 채용 페이지 | 9
+#26 | GitHub URL | text | github[.]com/example | 26
+#27 | 전체 동의 | consent | false | 
+#28 | 개인정보 필수항목 수집 및 이용 동의 (필수) | consent | true | 
+#29 | 개인정보 선택항목 수집 및 이용 동의 (필수) | consent | true | 
+#30 | 민감정보 수집 및 이용 동의 (필수) | consent | true | 
+#31 | 개인정보 제3자 이용제공 동의 (선택) | consent | false | 
+errors | 필수 입력 오류 표시 | count | 0 |
+testbed | 제출됨 | flag | false |
+testbed | 누르면 안 되는 버튼 클릭 | count | 0 |
+testbed | 무시된 클릭 | count | 0 |
+testbed | 화면·저장 불일치 | list |  |

@@ -1,0 +1,18 @@
+title: 홍길동 이력서 — 그린데이터 데이터 엔지니어
+output: 홍길동_그린데이터_데이터엔지니어_이력서.pdf
+eyebrow: DATA ENGINEER · 파이프라인 · 운영 지표 · 알림 자동화
+lede: 물류 현장의 반복 조회 업무를 Python·SQL 파이프라인과 알림으로 바꿔 왔습니다. 창고별 출고 지연 알림을 만들어 담당자가 매일 들이던 시간을 줄였습니다.
+experience:
+  - company: 예시물류
+    stack: Python, SQL, Slack API, Superset
+    items:
+      - {title: 출고 지연 알림 자동화, tag: "2024.06–08", text: "WMS DB를 조회해 창고별 기준으로 지연 건을 골라 담당자별로 Slack 알림을 보내는 파이프라인을 만들었습니다. 실패하면 재시도하고 실행 로그를 남깁니다. 하루 약 2시간 걸리던 공유 업무가 약 15분으로 줄었습니다."}
+      - {title: 재고 이상치 대시보드, tag: "팀 · 2024.10–12", text: "일별 입출고 대비 재고 변화를 계산하는 SQL과 이상치 기준(전주 대비 3배)을 설계해 Superset 대시보드로 구성했습니다."}
+project_sections:
+  - heading: 프로젝트
+    entries:
+      - {when: ["2023.09", "2023.11"], title: 버스 혼잡도 알림, sub: 공공데이터 활용 해커톤 · 4인 팀 · 백엔드 담당, dots: ["공공 API로 정류장별 혼잡도를 받아 FastAPI로 알림 API를 구현했습니다."], award: 공공데이터 활용 해커톤 우수상}
+skills:
+  - {label: Language, value: "Python, SQL"}
+  - {label: Data, value: "Superset, PostgreSQL"}
+  - {label: Backend, value: "FastAPI, REST API"}

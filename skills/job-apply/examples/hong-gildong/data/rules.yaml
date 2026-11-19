@@ -1,0 +1,8 @@
+defaults: {scope: 문안 작성, humanize: always, pdf_check: always, register: 합니다체, submit: never}
+language_scores: {TOEIC: include_unless_expired_forbidden}
+fixed_metrics:
+  - {topic: 출고 지연 알림, use: "하루 약 2시간 → 약 15분", why: 사내 보고서 기준}
+exclude_from_resume_and_letter: []
+never_claim_without_new_evidence: [Kubernetes 운영]
+consent: {required: check, optional_collection: ask, sensitive_required: ask, third_party: never}
+experience_questions: {product_trial: ask}

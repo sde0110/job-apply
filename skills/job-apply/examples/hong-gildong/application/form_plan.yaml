@@ -1,0 +1,35 @@
+# 로컬 테스트 양식(testbed) 입력 계획 — form_check.py 로 화면 점검 결과와 대조
+url: http://127.0.0.1:8791/
+testbed: true
+never_click: [제출하기, 이메일 확인]
+fields:
+  - {label: 이름, kind: text, value: 홍길동}
+  - {label: 성별, kind: select, value: 남성}
+  - {label: 생년월일, kind: select, value: "1999. 03. 15"}
+  - {label: 이메일주소, kind: text, value: gildong@example.com}
+  - {label: 연락처, kind: text, value: "01000000000"}
+  - {label: 병역사항, kind: select, value: 군필}
+  - {label: 장애여부, kind: radio, value: 비대상}
+  - {label: 보훈여부, kind: radio, value: 비대상}
+  - {label: 고용형태, nth: 1, kind: select, value: 정규직}
+  - {label: 회사명, nth: 1, kind: text, value: 주식회사 예시물류}
+  - {label: 근무기간, nth: 1, kind: select, value: "2024. 03"}
+  - {label: 근무기간, nth: 1, kind: checks, value: [재직 중]}
+  - {label: 부서, nth: 1, kind: text, value: 운영기획팀}
+  - {label: 직급, nth: 1, kind: text, value: 사원}
+  - {label: 담당업무, nth: 1, kind: text, value: "창고별 출고 지연 알림 파이프라인과 재고 이상치 대시보드를 만들고 운영 지표를 관리합니다."}
+  - {label: 이력서, kind: file, file: 홍길동_그린데이터_데이터엔지니어_이력서.pdf}
+  - {label: 자기소개서, kind: file, file: 홍길동_그린데이터_데이터엔지니어_자기소개서.pdf}
+  - {label: 포트폴리오, kind: radio, value: 파일}
+  - {label: 지원 동기, kind: text, text_from: "final_coverletter.md#[웹 답변] 지원 동기"}
+  - {label: 업무 경험, kind: text, text_from: "final_coverletter.md#[웹 답변] 관련 업무 경험"}
+  - {label: 관심 분야, kind: checks, value: [Analytics, Data pipeline]}
+  - {label: 코딩테스트 언어, kind: radio, value: Python}
+  - {label: 합류, kind: text, value: 협의 후 조정 가능합니다.}
+  - {label: 경로, kind: text, value: 회사 채용 페이지}
+  - {label: GitHub, kind: text, value: https://github.com/example}
+consents:
+  - {label: 필수항목, value: true}
+  - {label: 선택항목, value: true}
+  - {label: 민감정보, value: true}
+  - {label: 제3자, value: false}

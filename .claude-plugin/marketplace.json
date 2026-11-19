@@ -1,0 +1,13 @@
+{
+  "name": "job-apply",
+  "description": "한국어 채용 지원서 작성·검증·입력 스킬 (job-apply)",
+  "owner": {"name": "sde0110", "url": "https://github.com/sde0110"},
+  "plugins": [
+    {
+      "name": "job-apply",
+      "source": "./",
+      "description": "채용 공고·지원서 링크로 맞춤 이력서·자기소개서 PDF와 지원서 답변을 만들고 검증한 뒤 지원서 화면에 입력(제출 직전까지)",
+      "category": "productivity"
+    }
+  ]
+}

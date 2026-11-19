@@ -1,0 +1,21 @@
+# 영문 1쪽 이력서 예시 — lang: en 은 profile.yaml 의 *_en 값을, layout: compact 는 1쪽용 배치를 쓴다
+title: Hong Gildong — Data Engineer, GreenData
+output: Hong_Gildong_GreenData_Data_Engineer_Resume.pdf
+lang: en
+layout: compact
+eyebrow: DATA ENGINEER · PIPELINES · OPERATIONS METRICS · ALERTING
+lede: I turn repetitive lookups in logistics operations into Python and SQL pipelines with alerts. A warehouse-level shipping-delay alert cut the time staff spent sharing delays every day.
+experience:
+  - company: 예시물류
+    stack: Python, SQL, Slack API, Superset
+    items:
+      - {title: Shipping-delay alerts, tag: "Jun–Aug 2024", text: "Built a pipeline that queries the WMS database, picks delayed orders by each warehouse's rule, and sends Slack alerts to the owner, with retries and run logs. Daily sharing work dropped from about 2 hours to about 15 minutes."}
+      - {title: Inventory anomaly dashboard, tag: "Team · Oct–Dec 2024", text: "Designed the SQL comparing daily stock change with inbound and outbound volume, set the anomaly rule (3x week over week), and built the Superset dashboard."}
+project_sections:
+  - heading: Projects
+    entries:
+      - {when: ["Sep 2023", "Nov 2023"], title: Bus congestion alerts, sub: Public Data Hackathon · team of 4 · backend, dots: ["Implemented an alert API in FastAPI on top of a public per-stop congestion API."], award: "Excellence Award, Public Data Hackathon"}
+skills:
+  - {label: Language, value: "Python, SQL"}
+  - {label: Data, value: "Superset, PostgreSQL"}
+  - {label: Backend, value: "FastAPI, REST API"}

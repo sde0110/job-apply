@@ -1,0 +1,47 @@
+# 사용자 데이터 폴더(~/.job-apply)의 profile.yaml 예시 — 가상 인물
+# verified: 원본(증빙 원본으로 확인) / 사용자(본인 확인) / 2차(이력서·포트폴리오 등에만 있음) / 부분 / 미확인
+# 영문 이력서(resume.yaml 의 lang: en)를 쓸 때만: 한글 값 옆에 <키>_en 을 단다 (예: company_en, school_en, title_en).
+#   빠진 값이 있으면 render_resume.py 가 어떤 키가 필요한지 알려 준다.
+name: {ko: 홍길동, en: Hong Gildong, en_upper: HONG GILDONG}
+birth_date: "1999-03-15"
+gender: 남
+contact: {phone: "010-0000-0000", phone_digits: "01000000000", email: gildong@example.com}
+address: {zip: "00000", line: "서울특별시 ○○구 ○○로 1"}
+links:
+  github: https://github.com/example
+  portfolio: https://example.dev
+  linkedin: https://www.linkedin.com/in/example/
+  portfolio_projects: https://example.dev        # 포트폴리오 PDF 프로젝트 상세 링크 기준
+form_defaults:                                   # 지원서 반복 선택값 (확인된 것만)
+  military: 군필
+  disability: 비대상
+  veteran: 비대상
+  coding_language: Python
+  interest_areas: []
+  joining_date: "협의 후 조정 가능합니다."
+
+education:
+  - {school: 한국대학교, major: 컴퓨터공학과, degree: 학사, status: 졸업, period: ["2018-03", "2024-02"], verified: 원본}
+
+career:
+  - company: 예시테크                 # 이력서·resume.yaml 에서 쓰는 이름
+    legal_name: 주식회사 예시테크       # 지원서 회사 검색에 쓰는 법인명
+    employment_type: 정규직
+    start: "2024-03-02"
+    end: null                          # 재직 중
+    department: 플랫폼팀
+    title: 사원
+    display_title: Backend Engineer    # 선택 (없으면 '부서 직급')
+    verified: 사용자
+
+education_programs: []
+certificates:
+  - {name: 정보처리기사, number: "", date: "2023-11-15", issuer: 한국산업인력공단, verified: 원본}
+language_tests:
+  - {name: TOEIC, score: "850", date: "2024-05-01", verified: 원본}
+awards:
+  - {date: "2023-11", title: ○○ 해커톤, prize: 우수상, project: 예시 프로젝트, verified: 원본}
+publications: []
+software_skills:
+  base:
+    - {category: 언어, name: Python, level: 고급, years: 4}

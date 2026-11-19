@@ -1,0 +1,36 @@
+# 가상 인물 예제 — 실제 인물과 관계없음
+name: {ko: 홍길동, en: Hong Gildong, en_upper: HONG GILDONG}
+birth_date: "1999-03-15"
+gender: 남
+contact: {phone: "010-0000-0000", phone_digits: "01000000000", email: gildong@example.com}
+links:
+  github: https://github.com/example
+  portfolio: https://example.dev
+form_defaults:
+  military: 군필
+  coding_language: Python
+  joining_date: "협의 후 조정 가능합니다."
+education:
+  - {school: 한국대학교, major: 산업공학과, degree: 학사, status: 졸업, period: ["2018-03", "2024-02"], verified: 원본,
+     school_en: Hankuk University, major_en: Industrial Engineering, degree_en: B.S., status_en: Graduated}
+career:
+  - company: 예시물류
+    company_en: Example Logistics      # *_en: 영문 이력서(lang: en)에서 쓰는 값
+    legal_name: 주식회사 예시물류
+    employment_type: 정규직
+    employment_type_en: Full-time
+    start: "2024-03-04"
+    end: null
+    department: 운영기획팀
+    title: 사원
+    display_title: Operations Data Analyst
+    verified: 사용자
+certificates:
+  - {name: 정보처리기사, date: "2023-11-15", issuer: 한국산업인력공단, verified: 원본, name_en: Engineer Information Processing, issuer_en: HRD Korea}
+  - {name: SQLD, date: "2023-09-08", issuer: 한국데이터산업진흥원, verified: 원본, issuer_en: Korea Data Agency}
+language_tests:
+  - {name: TOEIC, score: "845", date: "2023-05-21", verified: 원본}
+awards:
+  - {date: "2023-11", title: 공공데이터 활용 해커톤, prize: 우수상, project: 버스 혼잡도 알림, verified: 원본,
+     title_en: Public Data Hackathon, prize_en: Excellence Award, project_en: Bus congestion alerts}
+  - {date: "2022-06", title: 교내 캡스톤 경진대회, prize: 장려상, project: 창고 동선 시뮬레이터, verified: 2차}

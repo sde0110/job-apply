@@ -1,0 +1,19 @@
+# 청록 — 밝은 청록 강조, 주황 수상
+label: Teal
+colors:
+  ink: "#0b0f17"
+  body: "#2a2f37"
+  sub: "#4b5260"
+  meta: "#7a818c"
+  faint: "#a3a9b2"
+  line: "#e4e7eb"
+  hair: "#eef0f2"
+  accent: "#3b9aa3"
+  dot: "#8fd8de"
+  soft: "#f3f8f8"
+  warm: "#c7724c"
+  tint: "#f5f9f9"
+  tint2: "#f3f6f7"
+  chip: "#f2f4f6"
+  chip-ink: "#4b5260"
+  foot: "#a3a9b2"

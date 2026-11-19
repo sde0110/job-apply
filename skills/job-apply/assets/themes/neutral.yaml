@@ -1,0 +1,19 @@
+# 중립 (기본) — 남색 강조, 회색 본문
+label: Neutral
+colors:
+  ink: "#111418"
+  body: "#2b2f36"
+  sub: "#4d535c"
+  meta: "#7b818a"
+  faint: "#a6abb2"
+  line: "#e5e7ea"
+  hair: "#eff0f2"
+  accent: "#3d5a80"
+  dot: "#9db4d0"
+  soft: "#f3f5f8"
+  warm: "#b5653c"
+  tint: "#f4f6f9"
+  tint2: "#f2f4f7"
+  chip: "#f2f4f6"
+  chip-ink: "#4b5260"
+  foot: "#a3a9b2"

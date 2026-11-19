@@ -1,0 +1,8 @@
+# PDF 테마 (선택). 파일이 없으면 neutral.
+# 프리셋: neutral(남색) · teal(청록) · forest(초록) · burgundy(자주) · mono(흑백 인쇄용)
+#   한눈에 비교: python3 <스킬>/scripts/theme_preview.py [내 resume.yaml]
+preset: neutral
+# 색 몇 개만 바꾸고 싶으면 덮어쓸 값만 적는다 (키 목록: assets/themes/neutral.yaml)
+# colors:
+#   accent: "#3d5a80"
+#   warm: "#b5653c"

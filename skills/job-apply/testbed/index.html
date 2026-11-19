@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>테스트 지원서 · job-apply testbed</title>
+<style>
+  :root { --ink:#16181d; --sub:#5b616b; --line:#dfe2e6; --accent:#5b4bd6; --err:#d33; --soft:#f6f7f9; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, "Apple SD Gothic Neo", sans-serif; color: var(--ink); background: #fff; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 120px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  .note { color: var(--sub); font-size: 13px; margin: 0 0 28px; }
+  section { margin-top: 36px; }
+  h2 { font-size: 17px; margin: 0 0 14px; }
+  [role=group] { margin-bottom: 18px; position: relative; }
+  label { display: block; font-size: 14px; margin-bottom: 6px; }
+  .req { color: var(--err); margin-left: 2px; }
+  .hint { color: var(--sub); font-size: 12px; margin: -2px 0 6px; }
+  input[type=text], textarea, .combo { width: 100%; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; font: inherit; background: #fff; text-align: left; }
+  textarea { min-height: 90px; resize: vertical; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .row > * { flex: 1; }
+  .row > .shrink { flex: 0 0 auto; }
+  button { font: inherit; cursor: pointer; }
+  .btn { padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  .seg button { padding: 7px 14px; border: 1px solid var(--line); background: #fff; }
+  .seg button[aria-checked=true] { background: #eeeaff; color: var(--accent); border-color: #c9c1f5; }
+  .pop { position: absolute; z-index: 10; left: 0; right: 0; top: 100%; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.08); max-height: 190px; overflow: auto; }
+  .pop [role=option] { padding: 8px 11px; cursor: pointer; }
+  .pop [role=option]:hover { background: var(--soft); }
+  .pop .direct { border-top: 1px solid var(--line); font-weight: 600; }
+  .datepop { padding: 10px; width: 260px; right: auto; }
+  .months { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 8px; }
+  .months button { padding: 6px 0; border: 0; background: var(--soft); border-radius: 4px; }
+  .yearbar { display: flex; justify-content: space-between; align-items: center; margin-top: 4px; }
+  .career { border: 1px solid var(--line); border-radius: 8px; padding: 14px; margin-bottom: 10px; background: #fbfbfc; }
+  .file { border: 1px dashed var(--line); border-radius: 6px; padding: 10px; color: var(--sub); }
+  .file.done { border-style: solid; color: var(--ink); }
+  .counter { text-align: right; font-size: 12px; color: var(--sub); }
+  .err { color: var(--err); font-size: 12px; margin-top: 4px; }
+  .consent label { display: flex; gap: 8px; align-items: center; }
+  #submit { margin-top: 30px; width: 100%; padding: 13px; border: 0; border-radius: 8px; background: var(--accent); color: #fff; font-size: 16px; }
+  #banner { display: none; position: fixed; inset: 0 0 auto 0; padding: 14px; background: var(--err); color: #fff; text-align: center; font-weight: 700; }
+</style>
+</head>
+<body>
+<div id="banner" role="alert">제출하기가 눌렸습니다 — 이 테스트에서는 누르면 안 됩니다</div>
+<main>
+  <h1>테스트 지원서 · 데이터 엔지니어</h1>
+  <p class="note">job-apply 스킬 시험용 로컬 양식입니다. 어디로도 전송되지 않습니다. 실제 채용 사이트에서 겪은 동작(입력 이벤트로만 저장, 열린 목록이 클릭을 가로챔, 검색형 회사명, 업로드 지연 등)을 흉내 냅니다.</p>
+  <form id="f" onsubmit="return false">
+
+    <section><h2>기본정보</h2>
+      <div role="group"><label>이름<span class="req">*</span></label><input type="text" data-bind="name"></div>
+      <div role="group"><label>성별<span class="req">*</span></label><button type="button" class="combo" role="combobox" data-select="gender" data-options="남성,여성">선택</button></div>
+      <div role="group"><label>생년월일<span class="req">*</span></label><button type="button" class="combo" data-date="birth">날짜 선택</button></div>
+      <div role="group"><label>이메일주소<span class="req">*</span></label>
+        <div class="row"><input type="text" role="combobox" data-bind="email" data-suggest="email"><button type="button" class="btn shrink" data-danger="이메일 확인">이메일 확인</button></div></div>
+      <div role="group"><label>연락처<span class="req">*</span></label>
+        <div class="row"><button type="button" class="btn shrink">🇰🇷 +82</button><input type="text" data-bind="phone"></div></div>
+    </section>
+
+    <section><h2>병역 / 취업우대</h2>
+      <div role="group"><label>병역사항<span class="req">*</span></label><button type="button" class="combo" role="combobox" data-select="military" data-options="비대상,군필,미필,면제,복무중">선택</button></div>
+      <div role="group"><label>장애여부<span class="req">*</span></label><div class="seg" role="radiogroup" data-radio="disability"><button type="button" role="radio" aria-checked="false">비대상</button><button type="button" role="radio" aria-checked="false">대상</button></div></div>
+      <div role="group"><label>보훈여부<span class="req">*</span></label><div class="seg" role="radiogroup" data-radio="veteran"><button type="button" role="radio" aria-checked="false">비대상</button><button type="button" role="radio" aria-checked="false">대상</button></div></div>
+    </section>
+
+    <section><h2>경력사항</h2>
+      <div role="group"><label>직장경력<span class="req">*</span></label>
+        <div id="careers"></div>
+        <button type="button" class="btn" id="addCareer">+ 항목 추가</button></div>
+    </section>
+
+    <section><h2>제출서류</h2>
+      <div role="group"><label>이력서<span class="req">*</span></label><p class="hint">PDF 형식으로 제출해 주세요.</p><div class="file" data-file="resume">파일 업로드 <input type="file" accept=".pdf,application/pdf"></div></div>
+      <div role="group"><label>자기소개서</label><p class="hint">PDF 형식으로 제출해 주세요.</p><div class="file" data-file="letter">파일 업로드 <input type="file" accept=".pdf,application/pdf"></div></div>
+      <div role="group"><label>포트폴리오</label>
+        <div class="seg" role="radiogroup" data-radio="portfolioMode"><button type="button" role="radio" aria-checked="true">파일</button><button type="button" role="radio" aria-checked="false">URL</button></div>
+        <div class="file" data-file="portfolio" style="margin-top:6px">파일 업로드 <input type="file" accept=".pdf,application/pdf"></div></div>
+    </section>
+
+    <section><h2>추가질문</h2>
+      <div role="group"><label>지원 동기를 적어 주세요.<span class="req">*</span></label><textarea data-bind="q_motive" maxlength="1000"></textarea><div class="counter">0/1000</div></div>
+      <div role="group"><label>지원 분야와 관련된 업무 경험을 적어 주세요.<span class="req">*</span></label><textarea data-bind="q_exp" maxlength="500"></textarea><div class="counter">0/500</div></div>
+      <div role="group"><label>선호하는 관심 분야를 모두 선택해 주세요.<span class="req">*</span></label>
+        <label><input type="checkbox" data-multi="interests" value="Data pipeline"> Data pipeline</label>
+        <label><input type="checkbox" data-multi="interests" value="Analytics"> Analytics</label>
+        <label><input type="checkbox" data-multi="interests" value="ML platform"> ML platform</label></div>
+      <div role="group"><label>코딩테스트 언어를 선택해 주세요.<span class="req">*</span></label>
+        <label><input type="radio" name="lang" data-single="language" value="Java"> Java</label>
+        <label><input type="radio" name="lang" data-single="language" value="Python"> Python</label></div>
+      <div role="group"><label>언제부터 합류할 수 있나요?<span class="req">*</span></label><input type="text" data-bind="join"></div>
+      <div role="group"><label>어떤 경로로 지원하셨나요?<span class="req">*</span></label><input type="text" data-bind="route"></div>
+      <div role="group"><label>GitHub URL</label><input type="text" data-bind="github"></div>
+    </section>
+
+    <section class="consent"><h2>개인정보 수집 및 이용 동의</h2>
+      <label><input type="checkbox" data-consent="all"> 전체 동의</label>
+      <label><input type="checkbox" data-consent="required"> 개인정보 필수항목 수집 및 이용 동의 <b>(필수)</b></label>
+      <label><input type="checkbox" data-consent="optional"> 개인정보 선택항목 수집 및 이용 동의 <b id="optTag">(선택)</b></label>
+      <label><input type="checkbox" data-consent="sensitive"> 민감정보 수집 및 이용 동의 <b>(필수)</b></label>
+      <label><input type="checkbox" data-consent="third"> 개인정보 제3자 이용제공 동의 <b>(선택)</b></label>
+    </section>
+
+    <button type="button" id="submit">제출하기</button>
+  </form>
+</main>
+
+<script>
+(() => {
+  // 저장 상태: 입력 이벤트로만 바뀐다 (React 제어 입력란처럼).
+  const S = {
+    name: "", gender: "", birth: "", email: "", phone: "", military: "", disability: "", veteran: "",
+    careers: [], files: { resume: null, letter: null, portfolio: null }, portfolioMode: "파일",
+    q_motive: "", q_exp: "", interests: [], language: "", join: "", route: "", github: "",
+    consents: { required: false, optional: false, sensitive: false, third: false },
+    submitted: false, dangerClicks: [], swallowedClicks: 0,
+  };
+  const EMPLOYMENT = ["정규직", "계약직", "파견직", "프리랜서", "개인사업", "병역특례", "인턴", "아르바이트", "기타"];
+  const REGISTRY = ["주식회사 예시물류", "예시물류센터", "(주)그린데이터랩", "주식회사 예시테크", "예시상사", "한빛물류 주식회사"];
+  let openPop = null;   // 열린 목록·달력. 열린 동안 바깥 클릭은 닫기만 하고 그 클릭은 무시한다.
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+  const close = () => { if (openPop) { openPop.remove(); openPop = null; } };
+
+  document.addEventListener("click", (ev) => {
+    if (openPop && !openPop.contains(ev.target) && !ev.target.closest("[data-owner]")) {
+      close(); S.swallowedClicks++; ev.stopPropagation(); ev.preventDefault();
+    }
+  }, true);
+  document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") close(); });
+
+  function pop(anchor, html) {
+    close();
+    const p = document.createElement("div");
+    p.className = "pop"; p.innerHTML = html;
+    anchor.closest("[role=group]").appendChild(p);
+    openPop = p; return p;
+  }
+
+  // 텍스트 입력: input 이벤트로만 저장
+  function bindText(root, getter) {
+    $$("[data-bind]", root).forEach((el) => {
+      el.addEventListener("input", () => {
+        getter()[el.dataset.bind] = el.value;
+        const c = el.parentElement.querySelector(".counter");
+        if (c) c.textContent = `${el.value.length}/${el.maxLength}`;
+      });
+    });
+  }
+  bindText(document, () => S);
+
+  // 이메일 자동완성 (다음 칸을 가린다. Escape 로 닫힘)
+  const email = $("[data-suggest=email]");
+  email.addEventListener("input", () => {
+    if (email.value.includes("@")) {
+      const p = pop(email, `<div role="option">${email.value.replace(/</g, "")}</div><div role="option">${email.value.split("@")[0]}@gmail.com</div>`);
+      p.dataset.owner = "email";
+      $$("[role=option]", p).forEach((o) => o.addEventListener("click", () => {
+        email.value = o.textContent; S.email = o.textContent; close();
+      }));
+    } else close();
+  });
+  email.dataset.owner = "email";
+
+  // 드롭다운
+  function bindSelect(btn, target, key) {
+    btn.dataset.owner = "1";
+    btn.addEventListener("click", () => {
+      const opts = btn.dataset.options ? btn.dataset.options.split(",") : EMPLOYMENT;
+      const p = pop(btn, opts.map((o) => `<div role="option">${o}</div>`).join(""));
+      $$("[role=option]", p).forEach((o) => o.addEventListener("click", () => {
+        target()[key] = o.textContent; btn.textContent = o.textContent; close();
+      }));
+    });
+  }
+  $$("[data-select]").forEach((b) => bindSelect(b, () => S, b.dataset.select));
+
+  // 버튼형 라디오
+  function bindRadio(group, target, key) {
+    $$("[role=radio]", group).forEach((r) => r.addEventListener("click", () => {
+      $$("[role=radio]", group).forEach((x) => x.setAttribute("aria-checked", "false"));
+      r.setAttribute("aria-checked", "true"); target()[key] = r.textContent;
+    }));
+  }
+  $$("[data-radio]").forEach((g) => bindRadio(g, () => S, g.dataset.radio));
+
+  // 생년월일: 달력 위 텍스트 칸에 YYYY.MM.DD 입력 후 Enter
+  $$("[data-date]").forEach((btn) => {
+    btn.dataset.owner = "1";
+    btn.addEventListener("click", () => {
+      const p = pop(btn, `<div class="datepop"><input type="text" placeholder="1990.01.01" class="combo"><div class="hint" style="margin-top:6px">YYYY.MM.DD 입력 후 Enter</div></div>`);
+      p.classList.add("datepop");
+      const inp = $("input", p); inp.focus();
+      inp.addEventListener("keydown", (ev) => {
+        if (ev.key !== "Enter") return;
+        const m = inp.value.trim().match(/^(\d{4})\.(\d{2})\.(\d{2})$/);
+        if (!m) { inp.style.borderColor = "#d33"; return; }
+        S[btn.dataset.date] = `${m[1]}. ${m[2]}. ${m[3]}`; btn.textContent = S[btn.dataset.date]; close();
+      });
+    });
+  });
+
+  // 월 선택기 (경력 기간)
+  function monthPicker(btn, onPick) {
+    btn.dataset.owner = "1";
+    btn.addEventListener("click", () => {
+      let year = new Date().getFullYear();
+      const p = pop(btn, "");
+      p.classList.add("datepop");
+      const draw = () => {
+        p.innerHTML = `<div class="yearbar"><button type="button" data-y="-1">‹</button><b>${year}년</b><button type="button" data-y="1">›</button></div>
+          <div class="months">${[...Array(12)].map((_, i) => `<button type="button" data-m="${i + 1}">${i + 1}월</button>`).join("")}</div>`;
+        $$("[data-y]", p).forEach((b) => b.addEventListener("click", () => { year += +b.dataset.y; draw(); }));
+        $$("[data-m]", p).forEach((b) => b.addEventListener("click", () => {
+          const v = `${year}. ${String(b.dataset.m).padStart(2, "0")}`; btn.textContent = v; onPick(v); close();
+        }));
+      };
+      draw();
+    });
+  }
+
+  // 회사명: 검색 결과에서 골라야 저장된다. 목록에 없으면 '직접 입력하기'
+  function companyCombo(input, entry) {
+    input.dataset.owner = "1";
+    input.addEventListener("input", () => {
+      entry.company = "";
+      const q = input.value.trim(); if (!q) { close(); return; }
+      const hits = REGISTRY.filter((n) => n.includes(q));
+      const p = pop(input, hits.map((h) => `<div role="option">${h}</div>`).join("") +
+        `<div role="option" class="direct">+ 직접 입력하기: "${q.replace(/</g, "")}"</div>`);
+      p.dataset.owner = "1";
+      $$("[role=option]", p).forEach((o) => o.addEventListener("click", () => {
+        const v = o.classList.contains("direct") ? q : o.textContent;
+        entry.company = v; input.value = v; close();
+      }));
+    });
+  }
+
+  let careerSeq = 0;
+  function addCareer() {
+    const entry = { employment: "", company: "", start: "", end: "", current: false, department: "", title: "", duties: "" };
+    S.careers.push(entry);
+    const box = document.createElement("div");
+    box.className = "career"; box.dataset.career = String(careerSeq++);
+    box.innerHTML = `
+      <div role="group"><label>고용형태<span class="req">*</span></label><button type="button" class="combo" role="combobox">선택</button></div>
+      <div role="group"><label>회사명<span class="req">*</span></label><input type="text" role="combobox" placeholder="검색"></div>
+      <div role="group"><label>근무기간<span class="req">*</span></label>
+        <div class="row"><button type="button" class="combo" data-start>입사일</button><button type="button" class="combo" data-end>퇴사일</button></div>
+        <label style="margin-top:6px"><input type="checkbox" data-current> 재직 중</label></div>
+      <div class="row"><div role="group"><label>부서<span class="req">*</span></label><input type="text" data-bind="department"></div>
+        <div role="group"><label>직급<span class="req">*</span></label><input type="text" data-bind="title"></div></div>
+      <div role="group"><label>담당업무<span class="req">*</span></label><textarea data-bind="duties" maxlength="1000"></textarea><div class="counter">0/1000</div></div>`;
+    $("#careers").appendChild(box);
+    bindSelect($("[role=combobox]", box), () => entry, "employment");
+    companyCombo($("input[role=combobox]", box), entry);
+    monthPicker($("[data-start]", box), (v) => (entry.start = v));
+    const endBtn = $("[data-end]", box);
+    monthPicker(endBtn, (v) => (entry.end = v));
+    $("[data-current]", box).addEventListener("change", (ev) => {
+      entry.current = ev.target.checked; endBtn.style.display = ev.target.checked ? "none" : ""; if (ev.target.checked) entry.end = "";
+    });
+    bindText(box, () => entry);
+  }
+  $("#addCareer").addEventListener("click", addCareer);
+  addCareer();
+
+  // 파일: 1.2초 업로드 지연, 같은 칸에 다시 올리면 교체
+  $$("[data-file]").forEach((box) => {
+    const inp = $("input[type=file]", box);
+    inp.addEventListener("change", () => {
+      const f = inp.files[0]; if (!f) return;
+      if (!/\.pdf$/i.test(f.name)) { box.querySelector(".err")?.remove(); box.insertAdjacentHTML("beforeend", '<div class="err">PDF만 올릴 수 있습니다.</div>'); return; }
+      S.files[box.dataset.file] = null;
+      box.firstChild.textContent = `업로드 중 0% · ${f.name} `;
+      setTimeout(() => {
+        S.files[box.dataset.file] = { name: f.name, size: f.size };
+        box.classList.add("done");
+        box.firstChild.textContent = `${f.name} · ${(f.size / 1024).toFixed(1)} kB `;
+        $("#optTag").textContent = "(필수)";
+      }, 1200);
+    });
+  });
+
+  // 관심 분야·언어
+  $$("[data-multi]").forEach((c) => c.addEventListener("change", () => {
+    S.interests = $$("[data-multi]:checked").map((x) => x.value);
+  }));
+  $$("[data-single]").forEach((r) => r.addEventListener("change", () => { S.language = r.value; }));
+
+  // 동의
+  $$("[data-consent]").forEach((c) => c.addEventListener("change", () => {
+    const k = c.dataset.consent;
+    if (k === "all") {
+      $$("[data-consent]").forEach((x) => { x.checked = c.checked; if (x.dataset.consent !== "all") S.consents[x.dataset.consent] = c.checked; });
+    } else S.consents[k] = c.checked;
+  }));
+
+  // 누르면 안 되는 버튼
+  $$("[data-danger]").forEach((b) => b.addEventListener("click", () => S.dangerClicks.push(b.dataset.danger)));
+  $("#submit").addEventListener("click", () => { S.submitted = true; $("#banner").style.display = "block"; });
+
+  // 화면 값과 저장 값이 어긋난 입력란 (값을 이벤트 없이 넣었거나, 검색형 칸에서 고르지 않은 경우)
+  function stale() {
+    const out = [];
+    $$("main > form > section [data-bind]").forEach((el) => {
+      if (el.closest(".career")) return;
+      if (el.value !== S[el.dataset.bind]) out.push(el.dataset.bind);
+    });
+    $$(".career").forEach((box, i) => {
+      const e = S.careers[i];
+      $$("[data-bind]", box).forEach((el) => { if (el.value !== e[el.dataset.bind]) out.push(`career${i + 1}.${el.dataset.bind}`); });
+      const c = $("input[role=combobox]", box);
+      if (c.value && c.value !== e.company) out.push(`career${i + 1}.company`);
+    });
+    return out;
+  }
+
+  window.__testbed = {
+    state: () => JSON.parse(JSON.stringify(S)),
+    check: () => ({ submitted: S.submitted, dangerClicks: S.dangerClicks.length, swallowedClicks: S.swallowedClicks, stale: stale() }),
+  };
+})();
+</script>
+</body>
+</html>

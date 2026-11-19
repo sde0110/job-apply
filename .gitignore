@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+_build/
+.DS_Store
+# 사용자 데이터와 산출물은 절대 커밋하지 않는다
+.job-apply/
+*.pdf
+!examples/**/*.pdf
+.venv/
+venv/

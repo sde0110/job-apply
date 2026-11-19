@@ -1,0 +1,6 @@
+base: "{EXAMPLE_DIR}/materials"
+evidence_roots: ["{EXAMPLE_DIR}/materials/증빙"]
+output_dir: "{HOME}/applications"
+key_files:
+  experience: [경험정리.md]
+  resume_reference: 이력서.md

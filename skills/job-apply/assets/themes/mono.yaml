@@ -1,0 +1,19 @@
+# 흑백 — 강조색 없이 굵기로만 위계 (흑백 인쇄용)
+label: Mono
+colors:
+  ink: "#000000"
+  body: "#222222"
+  sub: "#444444"
+  meta: "#6e6e6e"
+  faint: "#9a9a9a"
+  line: "#dddddd"
+  hair: "#ebebeb"
+  accent: "#000000"
+  dot: "#9a9a9a"
+  soft: "#f2f2f2"
+  warm: "#000000"
+  tint: "#f4f4f4"
+  tint2: "#f2f2f2"
+  chip: "#f0f0f0"
+  chip-ink: "#333333"
+  foot: "#9a9a9a"

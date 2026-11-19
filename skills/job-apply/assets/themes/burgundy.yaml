@@ -1,0 +1,19 @@
+# 버건디 — 짙은 자주 강조
+label: Burgundy
+colors:
+  ink: "#161113"
+  body: "#302a2c"
+  sub: "#554b4f"
+  meta: "#83797d"
+  faint: "#aea5a8"
+  line: "#ebe4e6"
+  hair: "#f2eeef"
+  accent: "#8a3346"
+  dot: "#d9a5b1"
+  soft: "#f8f2f4"
+  warm: "#8a3346"
+  tint: "#f9f4f5"
+  tint2: "#f6f1f2"
+  chip: "#f4f1f2"
+  chip-ink: "#544a4e"
+  foot: "#aea5a8"

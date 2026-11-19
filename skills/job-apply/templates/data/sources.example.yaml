@@ -1,0 +1,10 @@
+# 근거 자료 위치 예시
+base: ~/Documents/취업            # 이력서·경험 정리 문서가 있는 폴더
+evidence_roots:                   # 자격증·상장·성적표 원본
+  - ~/Documents/취업/증빙
+extended_roots: []
+output_dir: ~/Documents/취업/applications
+key_files:                        # base 기준 상대 경로
+  experience: [경험정리.md]
+  resume_reference: 이력서.pdf
+exclude_dirs: [tmp]
