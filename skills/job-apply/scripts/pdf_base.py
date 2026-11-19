@@ -303,10 +303,18 @@ def contact_html() -> str:
     return f'\n<dl class="contact">\n{body}\n</dl>\n'
 
 
+# 인쇄용 HTML 은 스크립트·네트워크가 필요 없다. 혹시 데이터에 HTML 이 섞여도 실행·외부 요청이 안 되게 막는다
+# (글꼴·그림은 로컬 파일과 data: 만 허용).
+CSP = ("default-src 'none'; script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; "
+       "style-src 'unsafe-inline'; font-src file: data:; img-src file: data:")
+
+
 def doc(title: str, label: str, css: str, body: str, lang: str = "ko") -> str:
     author = e(profile()["name"]["en" if lang == "en" else "ko"])
     return f"""<!DOCTYPE html>
-<html lang="{lang}"><head><meta charset="utf-8"><title>{e(title)}</title>
+<html lang="{lang}"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="{CSP}">
+<title>{e(title)}</title>
 <meta name="author" content="{author}">
 <style>{FONTS}{page_css(label, lang)}{root_css()}{BASE_CSS}{css}</style></head>
 <body>{body}</body></html>"""
@@ -323,6 +331,7 @@ def when(a, b=None) -> str:
 
 
 def link(path: str) -> str:
+    path = str(path).removeprefix("https://").removeprefix("http://")
     return f'<a href="https://{e(path)}">{e(path)}</a>'
 
 

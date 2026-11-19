@@ -93,6 +93,24 @@ class PdfCheck(unittest.TestCase):
         self.assertFail(r, "쪽수")
         self.assertFail(r, "영문 문서에 한글")
 
+    def test_scripts_in_printed_html_are_blocked(self):
+        r = self.check("csp", "<p>정상 문장입니다</p><script>document.body.innerHTML='<p>HACKED</p>'</script>")
+        doc = pdf_check.pymupdf.open(str(self.tmp / "csp.pdf"))
+        text = "".join(p.get_text() for p in doc)
+        self.assertIn("정상 문장입니다", text)
+        self.assertNotIn("HACKED", text)
+
+    def test_markup_in_data_is_printed_as_text(self):
+        import render_resume
+        from config import profile, rules
+
+        data = {"title": "t", "output": "x.pdf", "eyebrow": "E", "lede": '<b>굵게</b><script>alert(1)</script>',
+                "experience": [], "skills": [{"label": "<i>L</i>", "value": "v"}]}
+        html = render_resume.Resume(data, profile(), rules()).html()
+        self.assertIn("&lt;b&gt;굵게&lt;/b&gt;&lt;script&gt;", html)
+        self.assertNotIn("<script>", html)
+        self.assertIn("&lt;i&gt;L&lt;/i&gt;", html)
+
     def test_line_start_middle_dot_warns_and_escape_prevents_it(self):
         r = self.check("dot", "<p>예시물류 운영기획팀<br>· 2024.03–2024.08</p>")
         self.assertTrue(any("줄 첫머리" in w for w in r["warns"]), r["warns"])

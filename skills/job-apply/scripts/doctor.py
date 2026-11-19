@@ -4,7 +4,7 @@
 사용: python3 doctor.py [--json]
 
 점검 항목
-- Python 3.10+ 와 패키지: PyYAML(필수), PyMuPDF·Pillow(PDF 검증), python-docx(DOCX 읽기)
+- Python 3.10+ 와 패키지: PyYAML(필수), PyMuPDF(PDF 검증·미리보기), python-docx(DOCX 읽기)
 - Chrome/Chromium (PDF 인쇄)
 - 번들 폰트 (Pretendard)
 - 사용자 데이터 폴더(~/.job-apply 또는 JOB_APPLY_HOME): 필수 파일, 권한, 자료 폴더 경로
@@ -112,7 +112,6 @@ def main():
     if not ok:
         ok, msg = check_module("fitz", "pymupdf", False)
     add("패키지", ok, msg, "PDF 검증")
-    ok, msg = check_module("PIL", "pillow", False); add("패키지", ok, msg, "PDF 미리보기")
     ok, msg = check_module("docx", "python-docx", False); add("패키지", ok, msg, "DOCX 읽기")
     if yaml_ok:
         ok, msg = check_chrome(); add("PDF", ok, msg, "PDF 인쇄")

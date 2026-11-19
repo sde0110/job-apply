@@ -30,7 +30,6 @@ def main():
 
     sys.path.insert(0, str(SCRIPTS))
     import yaml
-    from PIL import Image, ImageDraw
 
     try:
         import pymupdf
@@ -43,29 +42,32 @@ def main():
     data = yaml.safe_load(src.read_text(encoding="utf-8"))
     names = args.presets or presets()
     tmp = Path(tempfile.mkdtemp(prefix="job-apply-themes-"))
-    tiles = []
+    pdfs = []
     for name in names:
         set_theme(name)
         pdf = render(render_resume.build_html(data), tmp / f"{name}.pdf", tmp / "_build", f"{name}.html")
-        pix = pymupdf.open(pdf)[0].get_pixmap(dpi=60)
-        im = Image.frombytes("RGB", (pix.width, pix.height), pix.samples)
-        bar = Image.new("RGB", (im.width, 28), "white")
-        d = ImageDraw.Draw(bar)
-        d.rectangle([8, 8, 20, 20], fill=colors()["accent"])
-        d.text((28, 8), name, fill="black")
-        tile = Image.new("RGB", (im.width, im.height + 28), "white")
-        tile.paste(bar, (0, 0))
-        tile.paste(im, (0, 28))
-        tiles.append(tile)
-    w, h = tiles[0].size
-    cols = min(3, len(tiles))
-    rows = (len(tiles) + cols - 1) // cols
-    sheet = Image.new("RGB", (cols * w + (cols - 1) * 12, rows * h + (rows - 1) * 12), "#888888")
-    for i, t in enumerate(tiles):
-        sheet.paste(t, ((i % cols) * (w + 12), (i // cols) * (h + 12)))
-    out = Path(args.out) if args.out else tmp / "theme_preview.png"
-    sheet.save(out)
-    print(out)
+        pdfs.append((name, colors()["accent"], pdf))
+
+    # 1쪽씩 새 PDF 한 장에 나란히 놓고(벡터 그대로) 이름표를 단 뒤 PNG 로 굽는다
+    A4 = pymupdf.paper_rect("a4")
+    scale, label_h, gap = 0.5, 22, 12
+    tw, th = A4.width * scale, A4.height * scale + label_h
+    cols = min(3, len(pdfs))
+    rows = (len(pdfs) + cols - 1) // cols
+    out = pymupdf.open()
+    page = out.new_page(width=cols * tw + (cols - 1) * gap, height=rows * th + (rows - 1) * gap)
+    page.draw_rect(page.rect, color=None, fill=(0.53, 0.53, 0.53))
+    for i, (name, accent, pdf) in enumerate(pdfs):
+        x, y = (i % cols) * (tw + gap), (i // cols) * (th + gap)
+        page.draw_rect(pymupdf.Rect(x, y, x + tw, y + th), color=None, fill=(1, 1, 1))
+        rgb = tuple(int(accent[k:k + 2], 16) / 255 for k in (1, 3, 5))
+        page.draw_rect(pymupdf.Rect(x + 8, y + 7, x + 18, y + 17), color=None, fill=rgb)
+        page.insert_text((x + 24, y + 16), name, fontsize=10, fontname="helv")
+        with pymupdf.open(pdf) as src_doc:
+            page.show_pdf_page(pymupdf.Rect(x, y + label_h, x + tw, y + th), src_doc, 0)
+    target = Path(args.out) if args.out else tmp / "theme_preview.png"
+    page.get_pixmap(dpi=120).save(target)
+    print(target)
 
 
 if __name__ == "__main__":

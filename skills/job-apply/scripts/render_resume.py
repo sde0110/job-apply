@@ -148,7 +148,7 @@ class Resume:
             years = {c["date"][:4] for _, c in cs}
             label = years.pop() if len(years) == 1 and len(cs) > 1 else self.ym(cs[0][1]["date"])
             names = " · ".join(
-                f'<b>{e(self.v(c, "name", f"certificates[{i}]"))}</b> ({self.ym(c["date"])})' if len(cs) > 1
+                f'<b>{e(self.v(c, "name", f"certificates[{i}]"))}</b> ({e(self.ym(c["date"]))})' if len(cs) > 1
                 else f'<b>{e(self.v(c, "name", f"certificates[{i}]"))}</b>' for i, c in cs)
             i0, c0 = cs[0]
             li.append(f'<li><div class="when num">{e(label)}</div><div>{names} <i>· {e(self.v(c0, "issuer", f"certificates[{i0}]"))}</i></div></li>')
@@ -156,7 +156,7 @@ class Resume:
         for t in self.prof.get("language_tests", []):
             if policy.get(t["name"]) == "never":
                 continue
-            li.append(f'<li><div class="when num">{self.ym(t["date"])}</div><div><b>{e(t["name"])}</b> {e(t["score"])}</div></li>')
+            li.append(f'<li><div class="when num">{e(self.ym(t["date"]))}</div><div><b>{e(t["name"])}</b> {e(t["score"])}</div></li>')
         return f'<section class="sec" style="break-inside:avoid"><h2>{self.L["education"]}</h2>\n  <ul class="rows">{"".join(li)}</ul>\n</section>'
 
     def awards(self) -> str:
@@ -170,7 +170,7 @@ class Resume:
                 continue
             w = f"awards[{i}]"
             detail = self.v(a, "project", w) + (f', {self.v(a, "role", w)}' if a.get("role") else "")
-            li.append(f'<li><div class="when num">{self.ym(a["date"])}</div><div><span class="prize">{e(self.v(a, "prize", w))}</span> '
+            li.append(f'<li><div class="when num">{e(self.ym(a["date"]))}</div><div><span class="prize">{e(self.v(a, "prize", w))}</span> '
                       f'<b>{e(self.v(a, "title", w))}</b> <i>· {e(detail)}</i></div></li>')
         if not li:
             return ""

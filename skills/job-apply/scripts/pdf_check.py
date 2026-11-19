@@ -209,25 +209,21 @@ def last_page_fill(lines: list[Line], page, top: float, bottom: float) -> float:
 
 # ── 기타 ────────────────────────────────────────────────────
 
-def contact_sheet(doc, path: str, dpi: int = 80):
-    from PIL import Image
-
-    ims = []
-    for p in doc:
-        pix = p.get_pixmap(dpi=dpi)
-        ims.append(Image.frombytes("RGB", (pix.width, pix.height), pix.samples))
-    cols = min(4, len(ims))
-    rows = (len(ims) + cols - 1) // cols
-    w, h = ims[0].size
-    sheet = Image.new("RGB", (cols * w + (cols - 1) * 16, rows * h + (rows - 1) * 16), "#888888")
-    for i, im in enumerate(ims):
-        sheet.paste(im, ((i % cols) * (w + 16), (i // cols) * (h + 16)))
+def contact_sheet(doc, path: str, dpi: int = 80, cols: int = 4, gap: int = 16):
+    """모든 쪽을 한 장의 PNG 로 이어 붙인다 (PyMuPDF 만 사용)."""
+    pixes = [p.get_pixmap(dpi=dpi) for p in doc]
+    w, h = pixes[0].width, pixes[0].height
+    cols = min(cols, len(pixes))
+    rows = (len(pixes) + cols - 1) // cols
+    sheet = pymupdf.Pixmap(pymupdf.csRGB, pymupdf.IRect(0, 0, cols * w + (cols - 1) * gap, rows * h + (rows - 1) * gap), False)
+    sheet.clear_with(0x88)
+    for i, pix in enumerate(pixes):
+        pix.set_origin((i % cols) * (w + gap), (i // cols) * (h + gap))
+        sheet.copy(pix, pix.irect)
     sheet.save(path)
 
 
 def compare(a, b) -> list[str]:
-    from PIL import Image, ImageChops
-
     problems = []
     if a.page_count != b.page_count:
         problems.append(f"쪽수 다름: {a.page_count} vs {b.page_count}")
@@ -235,9 +231,7 @@ def compare(a, b) -> list[str]:
         problems.append("텍스트 다름")
     for i in range(min(a.page_count, b.page_count)):
         pa, pb = a[i].get_pixmap(dpi=50), b[i].get_pixmap(dpi=50)
-        ia = Image.frombytes("RGB", (pa.width, pa.height), pa.samples)
-        ib = Image.frombytes("RGB", (pb.width, pb.height), pb.samples)
-        if ia.size != ib.size or ImageChops.difference(ia, ib).getbbox():
+        if (pa.width, pa.height) != (pb.width, pb.height) or pa.samples != pb.samples:
             problems.append(f"{i + 1}쪽 픽셀 다름")
     return problems
 

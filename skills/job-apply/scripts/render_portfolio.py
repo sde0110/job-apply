@@ -31,11 +31,17 @@ class Builder:
     def __init__(self, data: dict):
         self.d = data
         self.site = data.get("site", "").rstrip("/")
+        if self.site and not self.site.startswith(("https://", "http://")):
+            sys.exit(f"portfolio.yaml 의 site 는 http(s):// 주소여야 합니다: {self.site}")
         self.images = Path(os.path.expanduser(data.get("images", "."))).resolve()
         p = profile()
         github = p.get("links", {}).get("github", "").replace("https://", "")
         self.contact = f'{e(p["contact"]["email"])} &nbsp;|&nbsp; {e(github)}'
         self.name = p["name"]["ko"]
+
+    def url(self, slug: str) -> str:
+        """프로젝트 상세 링크 (속성값으로 들어가므로 이스케이프)."""
+        return e(f"{self.site}/projects/{slug}.html")
 
     # ── 조각 ──
     @staticmethod
@@ -49,13 +55,14 @@ class Builder:
 
     def head(self, pg):
         slug = pg.get("slug")
-        detail = f'<a class="detail" href="{self.site}/projects/{slug}.html">프로젝트 상세 ↗</a>' if slug else ""
+        detail = f'<a class="detail" href="{self.url(slug)}">프로젝트 상세 ↗</a>' if slug else ""
         return (f'<header class="ph"><div><p class="eyebrow">{e(pg["eyebrow"])}</p><h1>{self.title_html(pg["title"])}</h1>'
                 f'<p class="meta">{self.meta_html(pg["meta"])}</p></div>{detail}</header>')
 
     def fig(self, f):
         src = (self.images / f["src"]).resolve().as_uri()
-        return f'<figure><img src="{src}" style="max-height:{f["max_h"]}mm" alt=""><figcaption>{e(f["caption"])}</figcaption></figure>'
+        max_h = float(f["max_h"])  # 숫자만 (style 속성에 들어간다)
+        return f'<figure><img src="{e(src)}" style="max-height:{max_h:g}mm" alt=""><figcaption>{e(f["caption"])}</figcaption></figure>'
 
     @staticmethod
     def flow(steps):
@@ -76,7 +83,7 @@ class Builder:
         links = ""
         if f.get("links"):
             links = '<p class="links">' + "".join(
-                f'<a href="{self.site}/projects/{slug}.html">{e(text)}</a>' for slug, text in f["links"]) + "</p>"
+                f'<a href="{self.url(slug)}">{e(text)}</a>' for slug, text in f["links"]) + "</p>"
         return f'<div class="foot">{award}{chips}{links}</div>'
 
     def block(self, b):
@@ -134,7 +141,7 @@ class Builder:
 <div class="toc"><h2>프로젝트 안내</h2><ul>{toc}</ul></div>
 <div class="contact-line">
   <span>{self.contact}</span>
-  <a class="site" href="{self.site}">{e(c["site_link"])}</a>
+  <a class="site" href="{e(self.site)}">{e(c["site_link"])}</a>
 </div>""", "cover")
 
     def project(self, pg):
@@ -151,7 +158,7 @@ class Builder:
         if a.get("paper"):
             paper = (f'<h2>연구</h2><div class="paper"><b>{e(a["paper"]["title"])}</b>'
                      f'<p>{e(a["paper"]["text"])}</p></div>')
-        xp = "".join(f'<li><a href="{self.site}/projects/{s}.html">{e(n)}</a><span>{e(d)}</span></li>' for s, n, d in a["extra_projects"])
+        xp = "".join(f'<li><a href="{self.url(s)}">{e(n)}</a><span>{e(d)}</span></li>' for s, n, d in a["extra_projects"])
         return self.pg(
             self.head({"eyebrow": a["eyebrow"], "title": a["title"], "meta": a["meta"]})
             + f'<div class="ap">{paper}<h2>주요 수상</h2>{rows(a["awards"])}<h2>학력 · 교육 · 자격</h2>{rows(a["education"])}'

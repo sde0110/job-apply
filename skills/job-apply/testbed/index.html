@@ -133,6 +133,8 @@
   }, true);
   document.addEventListener("keydown", (ev) => { if (ev.key === "Escape") close(); });
 
+  const esc = (v) => String(v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+
   function pop(anchor, html) {
     close();
     const p = document.createElement("div");
@@ -157,7 +159,7 @@
   const email = $("[data-suggest=email]");
   email.addEventListener("input", () => {
     if (email.value.includes("@")) {
-      const p = pop(email, `<div role="option">${email.value.replace(/</g, "")}</div><div role="option">${email.value.split("@")[0]}@gmail.com</div>`);
+      const p = pop(email, `<div role="option">${esc(email.value)}</div><div role="option">${esc(email.value.split("@")[0])}@gmail.com</div>`);
       p.dataset.owner = "email";
       $$("[role=option]", p).forEach((o) => o.addEventListener("click", () => {
         email.value = o.textContent; S.email = o.textContent; close();
@@ -171,7 +173,7 @@
     btn.dataset.owner = "1";
     btn.addEventListener("click", () => {
       const opts = btn.dataset.options ? btn.dataset.options.split(",") : EMPLOYMENT;
-      const p = pop(btn, opts.map((o) => `<div role="option">${o}</div>`).join(""));
+      const p = pop(btn, opts.map((o) => `<div role="option">${esc(o)}</div>`).join(""));
       $$("[role=option]", p).forEach((o) => o.addEventListener("click", () => {
         target()[key] = o.textContent; btn.textContent = o.textContent; close();
       }));
@@ -230,8 +232,8 @@
       entry.company = "";
       const q = input.value.trim(); if (!q) { close(); return; }
       const hits = REGISTRY.filter((n) => n.includes(q));
-      const p = pop(input, hits.map((h) => `<div role="option">${h}</div>`).join("") +
-        `<div role="option" class="direct">+ 직접 입력하기: "${q.replace(/</g, "")}"</div>`);
+      const p = pop(input, hits.map((h) => `<div role="option">${esc(h)}</div>`).join("") +
+        `<div role="option" class="direct">+ 직접 입력하기: "${esc(q)}"</div>`);
       p.dataset.owner = "1";
       $$("[role=option]", p).forEach((o) => o.addEventListener("click", () => {
         const v = o.classList.contains("direct") ? q : o.textContent;
