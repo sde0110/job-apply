@@ -49,7 +49,7 @@ $ARGUMENTS
 | 자료 목록 | `python3 scripts/inventory.py [폴더...]` — 인자가 없으면 sources.yaml 의 base·evidence_roots. 중간 산출물 폴더는 제외하고 한글 경로의 NFC/NFD 차이를 맞춘다 |
 | 텍스트 추출 | `python3 scripts/extract_text.py <파일> [--pages 1-3]` — PDF·DOCX·MD. 스캔본이면 경고 |
 | 이미지·스캔 PDF | Read 도구로 직접 본다 |
-| 글자 수 | `python3 scripts/count.py <application.md>` 또는 `--text "..."` — 공백 포함·제외, UTF-8 바이트, 한글 2바이트 기준 |
+| 글자 수 | `python3 scripts/count.py <폴더>/final_coverletter.md [--limit 1000] [--limit "문항 일부=2000byte"]` 또는 `--text "..."` — `## [웹 답변]` 문항마다 공백 포함·제외, UTF-8 바이트, 한글 2바이트 기준, 줄바꿈 수. 문항 안 `<!-- limit: 1000자 -->` 주석도 읽는다. 따로 세는 스크립트를 만들지 않는다 |
 | 산출물 폴더 | `python3 scripts/init_output.py <회사명> <직무명>` — sources.yaml 의 output_dir 아래 `YYYY-MM-DD_회사명_직무명/` 과 md 템플릿 |
 | 이력서·자기소개서 PDF 만들기 + 검증 | 지원 폴더에 `resume.yaml`·`letter.yaml`(+ 윤문 확정본 md) 작성 → `python3 scripts/build_pdfs.py <폴더>` — 렌더, 쪽수·누락·폰트·겹침·여백·고아 제목·금지어(다른 지원 회사명 자동) 판정, 미리보기 PNG |
 | 개별 렌더 | `render_resume.py <폴더>/resume.yaml`, `render_letter.py <폴더>/letter.yaml` (`--theme 프리셋`으로 색만 바꿔 보기) |
@@ -61,7 +61,8 @@ $ARGUMENTS
 | 초기 설정 | `python3 scripts/setup_init.py [--example]` — 데이터 폴더 만들기. 전체 흐름은 `references/setup.md` |
 | 예제 실행 | `python3 scripts/run_example.py [작업폴더]` — 가상 인물로 설정→PDF→검증 전체를 시험 |
 | 입력 대조 | `python3 scripts/form_check.py <폴더>/form_plan.yaml <inspect.txt> --hashes "…"` — 입력 계획과 화면 점검 결과 대조 |
-| 화면 점검 | `scripts/browser/inspect.js`, `scripts/browser/hashes.js` — javascript_tool 에 넣는 스니펫 |
+| 알림창 가드 | `scripts/browser/dialogs.js` — 지원서 탭을 열 때와 페이지가 바뀔 때마다 javascript_tool 에 넣는다. confirm 은 기본 취소, alert 는 기록. `window.__jaDialogs.read()` / `allowOnce(글자)` / `restore()` |
+| 화면 점검 | `scripts/browser/inspect.js`, `scripts/browser/hashes.js` — javascript_tool 에 넣는 스니펫. [role=group] 양식과 표·fieldset·일반 라벨 양식을 모두 읽는다 |
 | 테스트 양식 | `python3 scripts/serve_testbed.py` → `http://127.0.0.1:8791/` — 실제 사이트의 까다로운 동작을 흉내 낸 로컬 양식 |
 | 공고·회사 조사 | WebFetch. 로그인이 필요하거나 내용이 잘리면 크롬에서 읽는다 |
 | 지원서 화면 | Claude in Chrome (`mcp__claude-in-chrome__*`). 먼저 chrome-browser 스킬을 읽고 도구는 ToolSearch 한 번으로 불러온다. 양식별 요령은 `references/form-adapters.md` |
@@ -139,7 +140,7 @@ PDF 데이터 형식과 디자인 규칙은 `references/pdf.md`에 있다.
 
 ## 6. 글자 수·내용·PDF 검증
 
-1) 각 답변을 `count.py`로 세어 제한을 맞춘다. 글자 수와 바이트 수를 구분하고, 사이트 계산 방식을 확인하면 그 방식을 따른다.
+1) 각 답변을 `count.py`로 세어 제한을 맞춘다(`final_coverletter.md`를 그대로 넣는다). 글자 수와 바이트 수를 구분하고, 사이트 계산 방식을 확인하면 그 방식을 따른다. 사이트 카운터를 읽지 못했으면 "카운터와 일치"라고 보고하지 않는다.
 2) 길이를 맞춘 뒤 문장 단절, 핵심 누락, 중복을 다시 본다.
 3) 이름, 회사명, 날짜, 경력기간, 점수, 자격증번호, 수치를 근거와 대조한다.
 4) 확인되지 않은 값과 안내용 표시가 제출용 본문에 섞이지 않게 한다.
@@ -155,6 +156,14 @@ PDF 데이터 형식과 디자인 규칙은 `references/pdf.md`에 있다.
 ## 7. 지원서 입력
 
 양식별 요령과 공통 절차(입력 계획 → 입력 → 점검 → 대조)는 `references/form-adapters.md`를 먼저 읽는다. 입력 전에 지원 폴더에 `form_plan.yaml`을 쓰고, 입력 후 `scripts/browser/inspect.js`·`hashes.js` 결과를 `scripts/form_check.py`로 대조해 모두 일치할 때까지 고친다.
+
+**알림창 (alert·confirm)** — 뜨면 탭이 멈춰 브라우저 도구가 모두 응답하지 않는다.
+
+- 지원서 탭을 열자마자, 그리고 페이지가 바뀔 때마다(`!!window.__jaDialogs`가 false면) `scripts/browser/dialogs.js`를 넣는다. 클릭·저장 뒤에는 `window.__jaDialogs.read()`로 뜬 알림을 읽고 보고에 반영한다.
+- `window.confirm`을 직접 `() => true`나 `() => false`로 덮어쓰지 않는다. 확인이 필요한 동작은 먼저 그냥 눌러(가드가 취소하고 문구를 기록한다) 문구를 확인한 뒤, 예상한 확인이면 `allowOnce("임시저장")`처럼 그 한 번만 허락하고 다시 누른다.
+- 지원 등록·최종제출처럼 되돌릴 수 없는 확인은 `allowOnce`로 통과하지 않는다. 사용자가 이번 요청에서 그 동작을 맡겼고 값을 다시 확인한 뒤에만 `allowRiskyOnce(글자)`를 쓰고 status.md 에 남긴다.
+- 사용자에게 탭을 넘기기 전(로그인, 비밀번호, 직접 업로드, 직접 제출)에는 반드시 `window.__jaDialogs.restore()`. 켜 둔 채 넘기면 사용자가 누른 확인도 소리 없이 취소된다.
+- 다른 출처 팝업(주소 검색, 파일 업로드 창 등)에는 가드가 걸리지 않는다. 그 안에서 알림이 뜰 동작은 사용자에게 한 번에 모아 맡긴다.
 
 - 기존 입력값을 먼저 읽고 정상 값은 덮어쓰지 않는다.
 - 드롭다운, 날짜, 체크박스, 라디오, 반복 경력란은 형식에 맞게 입력하고, 입력 직후 다시 읽어 반영됐는지 확인한다(클릭이 반영되지 않는 경우가 있다).

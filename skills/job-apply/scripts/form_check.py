@@ -32,7 +32,7 @@ import yaml
 
 def clean(s: str) -> str:  # inspect.js 의 clean() 과 같아야 한다
     s = re.sub(r"https?://", "", str(s))
-    s = s.replace("@", "(at)")
+    s = s.replace("@", "(at)").replace("|", "¦")  # | 는 칸 구분자라 값 안에서는 ¦ 로 바꾼다
     s = re.sub(r"[?=&]", "_", s)
     s = re.sub(r"([A-Za-z0-9-])\.(?=[A-Za-z]{2,})", r"\1[.]", s)
     return re.sub(r"\s+", " ", s).strip()
@@ -48,6 +48,7 @@ def sha16(s: str) -> str:
 
 def section_text(path: Path, heading: str | None) -> str:
     text = path.read_text(encoding="utf-8").split("<!-- HUMANIZE-SUMMARY")[0]
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)  # <!-- limit: … --> 같은 주석은 답변이 아니다 (count.py 와 같은 기준)
     if not heading:
         return text.strip()
     m = re.search(rf"^(#+) {re.escape(heading)}\s*$", text, flags=re.M)
@@ -84,13 +85,22 @@ def expected(plan: dict, base: Path) -> list[dict]:
 
 
 def parse_rows(text: str) -> list[dict]:
+    """'#순번 | 라벨 | 종류 | 값 | 길이' 줄을 읽는다.
+
+    inspect.js 는 값 안의 | 를 ¦ 로 바꿔 내보내지만, 예전 출력처럼 값에 | 가 남아 있어도
+    앞의 세 칸과 맨 끝 길이 칸을 기준으로 가운데를 값으로 읽는다.
+    """
     rows = []
     for line in text.splitlines():
-        parts = [p.strip() for p in line.rstrip().rstrip("|").split("|")]
+        parts = line.rstrip().split("|", 3)
         if len(parts) < 4:
             continue
-        rows.append({"seq": parts[0].lstrip("#"), "label": parts[1], "kind": parts[2], "value": parts[3],
-                     "len": parts[4] if len(parts) > 4 else ""})
+        seq, label, kind, rest = (p.strip() for p in parts)
+        value, length = rest, ""
+        head, sep, tail = rest.rpartition("|")
+        if sep and (tail.strip().isdigit() or not tail.strip()):
+            value, length = head.strip(), tail.strip()
+        rows.append({"seq": seq.lstrip("#"), "label": label, "kind": kind, "value": value, "len": length})
     return rows
 
 

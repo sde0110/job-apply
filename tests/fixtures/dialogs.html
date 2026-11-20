@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>알림창 가드 회귀용</title></head>
+<body>
+<p id="out"></p>
+<button id="save" onclick="document.getElementById('out').textContent = confirm('임시저장 하시겠습니까?\n임시저장 시 서류마감시간까지 수정이 가능하나, 추후 최종제출을 하여야 입사지원이 완료됩니다.') ? 'saved' : 'cancel'">임시저장</button>
+<button id="submit" onclick="document.getElementById('out').textContent = confirm('최종 제출하시겠습니까? 제출 후에는 수정할 수 없습니다.') ? 'submitted' : 'kept'">최종제출</button>
+<button id="pw" onclick="alert('비밀번호가 일치하지 않습니다.')">로그인</button>
+<button id="pop" onclick="window.__p = window.open('dialogs_popup.html', 'p', 'width=400,height=300')">학교 검색</button>
+</body></html>
