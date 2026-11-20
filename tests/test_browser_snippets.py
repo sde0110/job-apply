@@ -66,13 +66,17 @@ class Snippets(unittest.TestCase):
              f"--remote-debugging-port={cls.cdp_port}", "--remote-allow-origins=*", "--disable-popup-blocking",
              f"--user-data-dir={cls.tmp / 'profile'}", "--no-first-run", "--no-default-browser-check", "about:blank"],
             stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        for _ in range(100):
+        page = None
+        for _ in range(300):  # CI 에서 Chrome 을 처음 띄우면 10초를 넘기기도 한다
             try:
                 targets = json.load(urllib.request.urlopen(f"http://127.0.0.1:{cls.cdp_port}/json/list"))
                 page = next(t for t in targets if t["type"] == "page")
                 break
             except Exception:
                 time.sleep(0.1)
+        if page is None:
+            cls.chrome.terminate()
+            raise RuntimeError("Chrome 디버깅 포트에 30초 안에 연결하지 못함")
         cls.cdp = CDP(page["webSocketDebuggerUrl"])
 
     @classmethod
