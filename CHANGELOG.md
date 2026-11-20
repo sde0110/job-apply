@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.2 — 실제 지원 로그에서 찾은 안전·도구 문제
+
+실제 지원 10건의 세션 기록을 다시 보고 고쳤다.
+
+- 알림창 가드 `browser/dialogs.js`: confirm 은 기본 취소, alert·prompt 는 띄우지 않고 기록, 같은 출처 팝업·iframe 에도 적용, 이동해도 같은 탭이면 기록 유지. 예상한 확인은 `allowOnce`로 한 번만, 제출·삭제·등록 문구는 `allowRiskyOnce`(사용자가 맡긴 경우)로만 통과. 넘기기 전 `restore()`(이미 덮어쓴 함수도 진짜 함수로 되돌림). 지금까지는 세션마다 `window.confirm`을 직접 true/false 로 덮어써서, 되돌릴 수 없는 확인이 자동으로 통과되거나 사용자가 누른 임시저장 확인이 소리 없이 취소됐다.
+- `inspect.js`: [role=group] 밖의 양식도 읽는다(label[for]·aria·표 th·머리줄·fieldset legend·앞 제목). 네이티브 select, 날짜 칸, 이름별 라디오·체크박스 묶음, 같은 출처 iframe. 값 속 `|`는 `¦`로 바꾸고, 비밀번호·숨은 칸은 내보내지 않으며, "[object Object]"가 나오던 라디오 값을 고침
+- `form_check.py`: 값에 `|`가 든 칸을 불일치로 잘못 판정하던 문제(예전 출력도 읽음), 확정본의 `<!-- … -->` 주석 제외
+- `count.py`: SKILL.md 가 정한 `final_coverletter.md`의 `## [웹 답변]` 문항을 바로 센다(전에는 형식을 못 읽어 세션마다 따로 세는 스크립트를 만들었다). `--limit "문항=2000byte"`, `<!-- limit: … -->`, 줄바꿈 수
+- 이력서: 사용자가 확인한 수상(`verified: 사용자`)이 빠지던 문제
+- 입력 요령: incruit(등록 후 수정 불가, 세션 4시간, 졸업구분 alert, 코드 select, datepicker, 검색·첨부 팝업, `CheckApply()`로 저장 없이 빈 칸 찾기), Lever, Google Forms. 사람에게 넘길 일은 한 번에 모아서
+- 테스트: 일반 양식·알림창 가드 회귀(`tests/test_browser_snippets.py`), 글자 수·수상
+
 ## 0.1.1 — 보안 점검
 
 - 의존성: Pillow 를 빼고 미리보기·픽셀 비교를 PyMuPDF 로 대체(Pillow 12.x 의 알려진 취약점 42건 제거, 수정본은 Python 3.11 이상만 지원), 하한을 취약점이 고쳐진 버전으로 올림(pymupdf 1.26.7, lxml 6.1.0)

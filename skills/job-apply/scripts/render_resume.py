@@ -24,7 +24,7 @@ from config import profile, rules  # noqa: E402
 from pdf_base import (LABELS, RESUME_COMPACT_CSS, RESUME_CSS, chips, contact_html, doc, e, link, render,  # noqa: E402
                       set_theme, when, ym)
 
-AWARD_OK = {"원본", "부분"}
+AWARD_OK = {"원본", "사용자", "부분"}  # SKILL.md 1장: 원본·사용자 확인 값은 쓴다. 2차·미확인은 뺀다
 HANGUL = re.compile(r"[가-힣]")
 
 
@@ -164,7 +164,7 @@ class Resume:
         li = []
         for i, a in enumerate(self.prof.get("awards", [])):
             if a.get("verified") not in AWARD_OK:
-                continue  # 원본 미확인 수상은 넣지 않는다
+                continue  # 2차·미확인 수상은 넣지 않는다
             tokens = [t for t in a["title"].split() if len(t) > 2]
             if any(a["prize"] in ex and any(t in ex for t in tokens) for ex in excluded):
                 continue

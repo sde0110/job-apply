@@ -156,6 +156,25 @@ class EnglishResume(unittest.TestCase):
         self.assertIn("career[0].company_en", str(cm.exception))
 
 
+class Awards(unittest.TestCase):
+    def test_user_confirmed_award_is_kept_and_secondary_is_dropped(self):
+        import copy
+
+        import yaml
+
+        import render_resume
+        from config import profile, rules
+
+        data = yaml.safe_load((SKILL / "examples" / "hong-gildong" / "application" / "resume.yaml").read_text(encoding="utf-8"))
+        prof = copy.deepcopy(profile())
+        base = prof["awards"][0]
+        prof["awards"] = [dict(base, title="사용자확인 경진대회", verified="사용자"),
+                          dict(base, title="이차자료 경진대회", verified="2차")]
+        html = render_resume.Resume(data, prof, rules()).html()
+        self.assertIn("사용자확인 경진대회", html)
+        self.assertNotIn("이차자료 경진대회", html)
+
+
 class AutoForbid(unittest.TestCase):
     def test_other_application_companies_become_forbidden(self):
         import build_pdfs

@@ -5,8 +5,14 @@ await (async () => {
   const h = async (s) => [...new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s)))]
     .map((b) => b.toString(16).padStart(2, "0")).join("").slice(0, 16);
   const out = [];
-  for (const el of document.querySelectorAll("[data-ja-seq]")) {
-    if (el.value.length > 40) out.push(`${el.dataset.jaSeq} ${await h(el.value)}`);
+  const docs = [document];
+  for (const f of document.querySelectorAll("iframe")) {
+    try { if (f.contentDocument && f.contentDocument.body) docs.push(f.contentDocument); } catch (e) { /* 다른 출처 iframe */ }
+  }
+  for (const doc of docs) {
+    for (const el of doc.querySelectorAll("[data-ja-seq]")) {
+      if (el.value.length > 40) out.push(`${el.dataset.jaSeq} ${await h(el.value)}`);
+    }
   }
   return out.join(" ");
 })()

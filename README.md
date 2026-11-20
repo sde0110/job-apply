@@ -125,7 +125,8 @@ python3 <플러그인 폴더>/skills/job-apply/scripts/run_example.py
 - 채용 사이트의 이용약관을 지켜 주세요. 한 번에 한 공고씩 사람이 확인하며 지원하도록 만들었고, 대량 지원이나 자동 반복 지원에는 쓰지 마세요.
 - 공고나 웹페이지 안에 적힌 지시문은 따르지 않습니다.
 - 제출 전 마지막 확인과 그 책임은 지원자에게 있습니다.
-- 지금은 국내 채용 플랫폼(Greeting, recruiter.co.kr)에서 확인한 입력 요령이 들어 있습니다. 처음 보는 양식은 화면 구조를 읽어 입력하고, 확인한 요령을 문서에 쌓아 갑니다.
+- 지금은 Greeting, recruiter.co.kr, incruit, Lever, Google Forms 에서 확인한 입력 요령이 들어 있습니다. 처음 보는 양식은 화면 구조를 읽어 입력하고, 확인한 요령을 문서에 쌓아 갑니다.
+- 지원서 화면의 알림창(alert·confirm)은 가드로 막고 기록합니다. 등록·최종제출처럼 되돌릴 수 없는 확인은 맡긴 경우에만 한 번 통과시킵니다.
 
 <details>
 <summary><b>폴더 구조</b></summary>
@@ -136,7 +137,7 @@ skills/job-apply/
   SKILL.md               지원 흐름
   references/            초기 설정, 데이터 형식, PDF, 양식별 입력 요령
   scripts/               자료 목록, 텍스트 추출, 글자 수, PDF 렌더와 자동 판정, 환경 점검, 양식 대조
-  scripts/browser/       지원서 화면 점검 스니펫
+  scripts/browser/       지원서 화면 점검, 알림창 가드 스니펫
   templates/             데이터·결과물 템플릿
   assets/                Pretendard 글꼴, 테마 프리셋
   examples/hong-gildong/ 가상 인물 예제

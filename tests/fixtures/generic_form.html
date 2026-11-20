@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>일반 양식 (inspect.js 회귀용)</title>
+<style>.hide{display:none}</style></head>
+<body>
+<!-- inspect.js 가 [role=group] 이 없는 양식(표·fieldset·Lever·Google Forms 형태)을 읽는지 보는 고정 화면. 실제 사이트 코드를 복제하지 않고 구조만 흉내 낸다. -->
+<form id="f">
+  <table class="basic">
+    <tr><th>성명<span>*</span></th><td><input name="name" value="홍길동"></td>
+        <th>생년월일</th><td><input name="birth" class="datepicker" readonly value="1999-03-15"></td></tr>
+    <tr><th>병역</th><td><select name="mil"><option>선택</option><option selected>군필</option></select></td>
+        <th>비밀번호</th><td><input type="password" name="pw" value="secret-123"></td></tr>
+    <tr><th>장애여부</th><td>
+      <input type="radio" name="dis" id="d1" value="N" class="hide" checked><label for="d1">비대상</label>
+      <input type="radio" name="dis" id="d2" value="Y" class="hide"><label for="d2">대상</label></td>
+      <th>숨은칸</th><td><input name="ghost" class="hide" value="보이지 않음"></td></tr>
+  </table>
+
+  <table class="edu">
+    <thead><tr><th>학교명</th><th>전공</th><th>졸업구분</th></tr></thead>
+    <tbody><tr><td><input name="school" value="예시대학교"></td><td><input name="major" value="산업공학"></td>
+      <td><select name="grad"><option>선택</option><option selected>졸업</option></select></td></tr></tbody>
+  </table>
+
+  <div class="q"><p class="q-title">한 줄 소개</p><input name="intro" value="예시물류 | 운영기획팀"></div>
+  <div class="q"><p class="q-title">경력기술서</p><textarea name="career">[예시물류 | 운영기획팀] 창고별 출고 지연을 담당자가 매일 조회하던 일을 알림으로 바꿨습니다.</textarea></div>
+
+  <fieldset><legend>코딩테스트 언어</legend>
+    <label><input type="radio" name="lang" value="py" checked> Python</label>
+    <label><input type="radio" name="lang" value="java"> Java</label></fieldset>
+
+  <div class="interest"><span class="label">관심 분야</span>
+    <label><input type="checkbox" name="int" value="A" checked> Analytics</label>
+    <label><input type="checkbox" name="int" value="B"> ML platform</label></div>
+
+  <ul><li class="application-question"><div class="application-label"><div class="text">Full name</div></div>
+    <div class="application-field"><input name="lever_name" value="Gildong Hong"></div></li></ul>
+
+  <div role="listitem"><div role="heading">지원 경로</div>
+    <div role="radiogroup"><div role="radio" aria-checked="true" aria-label="회사 채용 페이지"></div>
+      <div role="radio" aria-checked="false" aria-label="지인 추천"></div></div></div>
+
+  <div><label for="file1">이력서 첨부</label><input type="file" id="file1" class="hide"></div>
+
+  <h4>개인정보 수집·이용 동의 (필수)</h4><label><input type="checkbox" name="agree1" checked> 동의함</label>
+  <h4>개인정보 제3자 제공 동의 (선택)</h4><label><input type="checkbox" name="agree3"> 동의함</label>
+</form>
+</body></html>

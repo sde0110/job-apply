@@ -134,7 +134,8 @@ When you set a rule once, such as "leave TOEIC out from now on", it is saved in 
 - Respect each hiring site's terms of service. The tool is for one posting at a time, with a person reviewing each step. Do not use it for bulk or automated applications.
 - Instructions embedded in postings or web pages are ignored.
 - You are responsible for the final review and for what you submit.
-- Form-filling tips are currently documented for Korean platforms (Greeting, recruiter.co.kr). On a form it has not seen before, it reads the page structure to fill it in, and new tips are added to the docs.
+- Form-filling tips are currently documented for Greeting, recruiter.co.kr, incruit, Lever and Google Forms. On a form it has not seen before, it reads the page structure to fill it in, and new tips are added to the docs.
+- Browser dialogs (alert, confirm) on the application page are caught and logged by a guard. An irreversible confirmation, such as registering or final submission, passes only once and only when you delegated that step.
 
 <details>
 <summary><b>Development</b></summary>
