@@ -17,7 +17,7 @@
 - 비교: --compare PDF 와 텍스트·쪽수·픽셀이 다름 (엔진 회귀 확인)
 
 경고 (종료 코드에 영향 없음)
-- Pretendard 가 아닌 폰트 사용(한글 외), 줄 첫머리의 가운뎃점·쉼표·닫는 괄호, 마지막 쪽이 거의 빔
+- Pretendard 가 아닌 폰트 사용(한글 외), 줄 첫머리의 가운뎃점·슬래시·쉼표·닫는 괄호, 마지막 쪽이 거의 빔
 
 --sheet 는 모든 쪽을 이어 붙인 PNG 를 만든다. 자동 판정이 못 보는 것(어색한 줄바꿈, 빈 공간, 그림 품질)은
 이 그림을 Read 로 열어 직접 본다.
@@ -40,7 +40,7 @@ except ImportError:  # 오래된 PyMuPDF
 MM = 72 / 25.4
 WEB_PREFIX = "[웹 답변]"
 HANGUL = re.compile(r"[가-힣ㄱ-ㆎ]")
-LINE_START_BAD = tuple("·,.)]」』:;")
+LINE_START_BAD = tuple("·/,.)]」』:;")
 BOLD = re.compile(r"(Bold|Black|Heavy)", re.I)  # SemiBold 는 라벨·눈썹 글씨라 제목으로 보지 않는다
 NON_PRETENDARD_OK = re.compile(r"(Menlo|SFMono|SF-Mono|Courier|Helvetica|Monaco|DejaVuSansMono|LiberationMono)", re.I)
 

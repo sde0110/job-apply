@@ -2,7 +2,7 @@
 """README 그림 만들기 — 가상 인물(홍길동) 예제로 PDF 를 만들어 docs/images/ 에 PNG 로 저장한다.
 
 사용: python3 docs/make_images.py
-- pdf-samples.png : 이력서 · 자기소개서 · 영문 1쪽 이력서 (각 쪽 위쪽)
+- pdf-samples.png : 이력서, 자기소개서, 영문 1쪽 이력서 (각 쪽 위쪽)
 - themes.png      : 테마 프리셋 5종으로 그린 이력서 윗부분
 """
 from __future__ import annotations

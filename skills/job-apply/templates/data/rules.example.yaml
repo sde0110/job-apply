@@ -21,3 +21,14 @@ consent:                    # check / never / ask
 
 experience_questions:
   product_trial: ask
+
+style:                      # 문체 검사(style_check.py) 규칙. middle_dot·team_size·bracket_heading 은 error / warn / off
+  examples: []              # 마음에 드는 본인 자기소개서 경로. 초안을 쓰기 전에 읽고 문체를 맞춘다
+  middle_dot: warn          # 본문의 가운뎃점(·) → 쉼표나 슬래시
+  team_size: warn           # "5인 팀", "팀원 4명" 같은 인원수
+  bracket_heading: off      # 웹 답변 첫 줄을 [소제목] 한 줄로
+  long_paragraph: 500       # 이보다 긴 문단(글자 수)은 나누라고 경고. 0 = 끔
+  tech_list: 0              # 한 문장에 영문 단어가 이 개수 이상이면 경고(기술명 나열). 0 = 끔
+  avoid: [에 있어서, 하는 것이 가능, 인재가 되겠습니다, 다양한, 효과적인, 혁신적인]
+  allow: []                 # 검사에서 뺄 공식 명칭 (예: 공고의 직무명 "AI·AX", 학과 이름)
+  humanize_min_change: 3    # 윤문 변경률(%)이 이보다 낮으면 그대로 넘기지 않고 문체를 직접 다시 본다

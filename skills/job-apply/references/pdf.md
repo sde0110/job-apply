@@ -29,9 +29,9 @@ python3 scripts/build_pdfs.py <지원폴더> [--forbid 단어…] [--allow 단�
 | 금지어, 영문 문서의 한글 | `--forbid` 단어, `--lang en`일 때 한글 |
 | 회귀 | `--compare 이전.pdf`와 텍스트·쪽수·픽셀이 다름 (렌더러를 고친 뒤) |
 
-경고: Pretendard 가 아닌 폰트(고정폭 칩 제외), 줄 첫머리의 가운뎃점·쉼표·닫는 괄호, 마지막 쪽이 12% 미만으로 참(조금 줄이면 한 쪽이 준다).
+경고: Pretendard 가 아닌 폰트(고정폭 칩 제외), 줄 첫머리의 가운뎃점·슬래시·쉼표·닫는 괄호, 마지막 쪽이 12% 미만으로 참(조금 줄이면 한 쪽이 준다).
 
-엔진 CSS 가 미리 막는 것: 섹션·경력 제목 뒤 쪽나눔 금지(`break-after: avoid`), 항목·표 줄 안 쪽나눔 금지, `" · "` 앞 줄바꿈 금지(NBSP), 레일 메타 줄의 짧은 조각은 쪼개지 않음, 고정폭 칩의 한글은 Pretendard 로.
+엔진 CSS 가 미리 막는 것: 섹션·경력 제목 뒤 쪽나눔 금지(`break-after: avoid`), 항목·표 줄 안 쪽나눔 금지, `" / "` 앞 줄바꿈 금지(NBSP), 레일 메타 줄의 짧은 조각은 쪼개지 않음, 고정폭 칩의 한글은 Pretendard 로.
 
 ### 눈으로 볼 것 (미리보기 PNG)
 
@@ -42,12 +42,13 @@ python3 scripts/build_pdfs.py <지원폴더> [--forbid 단어…] [--allow 단�
 - 이력서: 왼쪽 날짜 열(21mm) + 오른쪽 내용. 섹션 제목 옆에 가는 선. 기술 스택은 회색 고정폭 칩. 수상은 강조색 한 가지.
 - 자기소개서·경력기술서: 왼쪽 레일(섹션 이름·맥락) + 오른쪽 본문(굵은 한 줄 제목 + 문단). 첫 섹션 뒤에 "공고 요건 ↔ 근거 경험" 표.
 - 강조색은 하나만, 굵기·크기로 위계를 만든다. 파란 제목 + 밑줄 반복, 칸마다 테두리 있는 표, 문장마다 불릿은 피한다.
-- 이력서·자기소개서는 2쪽 이내(1쪽 이력서는 `layout: compact`). 바닥글에 이름 · 문서 종류와 쪽 번호(n / m).
+- 이력서·자기소개서는 2쪽 이내(1쪽 이력서는 `layout: compact`). 바닥글에 이름 / 문서 종류와 쪽 번호(n / m).
+- 구분자는 가운뎃점(·) 대신 ` / `(종류가 다른 조각: 회사 / 팀 / 기간)와 `, `(같은 종류 나열: 기술, 자격)를 쓴다. 엔진이 만드는 줄도 같은 규칙이고, resume.yaml·letter.yaml 에 쓰는 글은 `style_check.py`가 검사한다.
 
 ## 테마 (`theme.yaml`, 사용자 데이터 폴더)
 
 ```yaml
-preset: neutral        # neutral(기본, 남색) · teal(청록) · forest(초록) · burgundy(자주) · mono(흑백 인쇄용)
+preset: neutral        # neutral(기본, 남색), teal(청록), forest(초록), burgundy(자주), mono(흑백 인쇄용)
 colors:                # 선택: 바꿀 색만 덮어쓴다. 키 목록은 assets/themes/neutral.yaml
   accent: "#3d5a80"
 ```
@@ -65,7 +66,7 @@ lang: ko                    # 선택: en 이면 영문 이력서 (아래)
 layout: standard            # 선택: compact 면 1쪽용 촘촘한 배치 (쪽수 상한 1)
 max_pages: 2                # 선택: 쪽수 상한을 직접 정할 때
 label: 이력서               # 선택: 바닥글 문서 이름
-eyebrow: BACKEND ENGINEER · API · 데이터 파이프라인   # 이름 위 한 줄
+eyebrow: BACKEND ENGINEER / API, 데이터 파이프라인   # 이름 위 한 줄
 lede: 두세 문장 요약 (공고에 맞춘 강점)
 experience:                 # 회사명은 profile.yaml career[].company 와 같아야 한다 (기간·직함·고용형태는 profile 에서)
   - company: ○○주식회사
@@ -76,7 +77,7 @@ experience:                 # 회사명은 profile.yaml career[].company 와 같
     text: 한 문단 설명       # items 대신 문단 하나
 project_sections:
   - heading: 프로젝트
-    note: 개인 프로젝트 · 공개 저장소      # 선택, 제목 옆 회색 글씨
+    note: 개인 프로젝트, 공개 저장소      # 선택, 제목 옆 회색 글씨
     entries:
       - when: ["2025.08", "2025.10"]
         title: 서비스 이름
@@ -95,7 +96,7 @@ exclude_awards: []          # rules.yaml 외에 이번만 뺄 수상 (문자열�
 - 학력: degree 가 있는 항목만 (고등학교 제외)
 - 자격: 같은 기관·같은 해면 한 줄로 묶음
 - 어학: rules.yaml `language_scores` 가 never 인 시험 제외
-- 수상: verified 가 원본·부분인 것만, rules.yaml `exclude_from_resume_and_letter` 와 맞는 것 제외 (남는 수상이 없으면 섹션을 뺀다)
+- 수상: verified 가 원본·사용자·부분인 것만, rules.yaml `exclude_from_resume_and_letter` 와 맞는 것 제외 (남는 수상이 없으면 섹션을 뺀다)
 
 ### 영문 이력서 (`lang: en`)
 
@@ -112,7 +113,7 @@ title: 홍길동 자기소개서 — ○○ 백엔드 엔지니어
 output: 홍길동_○○_백엔드_자기소개서.pdf
 label: 자기소개서            # 바닥글 (지원서 첨부 칸 이름에 맞춰 '경력기술서' 등)
 lang: ko                     # 선택: en 이면 'Preferred' 등 영문 라벨
-eyebrow: 자기소개서 · BACKEND ENGINEER
+eyebrow: 자기소개서 / BACKEND ENGINEER
 subtitle: ○○ 지원
 source: final_coverletter.md   # 윤문 확정본. '## [웹 답변] …' 섹션은 PDF 에서 빠진다
 requirements:
@@ -122,8 +123,8 @@ requirements:
   rows:
     - {req: "Python 백엔드 개발", evidence: "…"}
     - {req: "Kubernetes 운영", evidence: "…", optional: true}   # optional → '우대' 표시
-rail_meta:                       # 섹션 레일 이름 → 아래 회색 맥락 (' · '로 조각을 나누면 조각 단위로 줄바꿈)
-  결제 정산 배치 개선: ○○주식회사 · 2025.03–06
+rail_meta:                       # 섹션 레일 이름 → 아래 회색 맥락 (' / '로 조각을 나누면 조각 단위로 줄바꿈)
+  결제 정산 배치 개선: ○○주식회사 / 2025.03–06
 ```
 
 경력기술서처럼 문서를 하나 더 만들려면 `letter_career.yaml`처럼 `letter`로 시작하는 이름으로 하나 더 둔다.

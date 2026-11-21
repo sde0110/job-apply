@@ -58,7 +58,7 @@ class Resume:
             parts.append(et)
         if c.get("note"):
             parts.append(self.v(c, "note", where))
-        return " · ".join(parts)
+        return " / ".join(parts)
 
     def experience(self) -> str:
         career = {c["company"]: (i, c) for i, c in enumerate(self.prof.get("career", []))}
@@ -121,7 +121,7 @@ class Resume:
     def skills(self) -> str:
         rows = []
         for s in self.d["skills"]:
-            note = f'<i> · {e(s["note"])}</i>' if s.get("note") else ""
+            note = f'<i>\u00a0/ {e(s["note"])}</i>' if s.get("note") else ""
             rows.append(f'<div><dt>{e(s["label"])}</dt><dd>{e(s["value"])}{note}</dd></div>')
         return f'<section class="sec" style="break-inside:avoid"><h2>{self.L["skills"]}</h2><dl class="skills">{"".join(rows)}</dl></section>'
 
@@ -132,14 +132,14 @@ class Resume:
                 continue  # 고등학교 등은 이력서에 넣지 않는다
             w = f"education[{i}]"
             a, b = ed["period"]
-            li.append(f'<li>{when(self.ym(a), self.ym(b))}<div><b>{e(self.v(ed, "school", w))}</b> {e(self.v(ed, "major", w))} '
-                      f'<i>· {e(self.v(ed, "degree", w))} {e(self.v(ed, "status", w))}</i></div></li>')
+            li.append(f'<li>{when(self.ym(a), self.ym(b))}<div><b>{e(self.v(ed, "school", w))}</b> {e(self.v(ed, "major", w))}\u00a0'
+                      f'<i>/ {e(self.v(ed, "degree", w))} {e(self.v(ed, "status", w))}</i></div></li>')
         for i, pg in enumerate(self.prof.get("education_programs", [])):
             w = f"education_programs[{i}]"
             a, b = pg["period"]
             hours = self.L["hours"].format(h=pg["hours"])
-            li.append(f'<li>{when(self.ym(a), self.ym(b))}<div><b>{e(self.v(pg, "name", w))}</b> {e(hours)} '
-                      f'<i>· {e(self.v(pg, "official_name", w))}, {e(self.v(pg, "org", w))}</i></div></li>')
+            li.append(f'<li>{when(self.ym(a), self.ym(b))}<div><b>{e(self.v(pg, "name", w))}</b> {e(hours)}\u00a0'
+                      f'<i>/ {e(self.v(pg, "official_name", w))}, {e(self.v(pg, "org", w))}</i></div></li>')
         certs = sorted(enumerate(self.prof.get("certificates", [])), key=lambda t: t[1]["date"])
         by_issuer: dict[str, list] = {}
         for i, c in certs:
@@ -147,11 +147,11 @@ class Resume:
         for _, cs in by_issuer.items():
             years = {c["date"][:4] for _, c in cs}
             label = years.pop() if len(years) == 1 and len(cs) > 1 else self.ym(cs[0][1]["date"])
-            names = " · ".join(
+            names = ", ".join(
                 f'<b>{e(self.v(c, "name", f"certificates[{i}]"))}</b> ({e(self.ym(c["date"]))})' if len(cs) > 1
                 else f'<b>{e(self.v(c, "name", f"certificates[{i}]"))}</b>' for i, c in cs)
             i0, c0 = cs[0]
-            li.append(f'<li><div class="when num">{e(label)}</div><div>{names} <i>· {e(self.v(c0, "issuer", f"certificates[{i0}]"))}</i></div></li>')
+            li.append(f'<li><div class="when num">{e(label)}</div><div>{names}\u00a0<i>/ {e(self.v(c0, "issuer", f"certificates[{i0}]"))}</i></div></li>')
         policy = self.rl.get("language_scores", {})
         for t in self.prof.get("language_tests", []):
             if policy.get(t["name"]) == "never":
@@ -171,7 +171,7 @@ class Resume:
             w = f"awards[{i}]"
             detail = self.v(a, "project", w) + (f', {self.v(a, "role", w)}' if a.get("role") else "")
             li.append(f'<li><div class="when num">{e(self.ym(a["date"]))}</div><div><span class="prize">{e(self.v(a, "prize", w))}</span> '
-                      f'<b>{e(self.v(a, "title", w))}</b> <i>· {e(detail)}</i></div></li>')
+                      f'<b>{e(self.v(a, "title", w))}</b>\u00a0<i>/ {e(detail)}</i></div></li>')
         if not li:
             return ""
         return f'<section class="sec" style="break-inside:avoid"><h2>{self.L["awards"]}</h2>\n  <ul class="rows">{"".join(li)}</ul>\n</section>'

@@ -62,7 +62,7 @@ It asks only what your records cannot answer, such as your start date or how you
 | Step | Checks |
 |---|---|
 | Evidence | How each fact was verified (original document, confirmed by you, or a secondary source); requirements with no evidence; fixed numbers from `rules.yaml` |
-| Writing | Character and byte limits; that numbers, names and your role did not change during editing |
+| Writing | Character and byte limits; that numbers, names and your role did not change during editing; your style rules (middle dots, team sizes, a [heading] line, long paragraphs, strings of tool names) |
 | PDF | Page count, missing sentences, clipped text, Korean font fallback, overlapping text, margin overflow, a heading left alone at the bottom of a page, names of other companies you applied to |
 | Form | Each field's value or selection, attachment names and sizes, hashes of long answers, required-field errors, consent scope |
 
@@ -122,7 +122,7 @@ Your profile and rules are YAML files in `~/.job-apply/`; set `JOB_APPLY_HOME` t
 | File | Contents |
 |---|---|
 | `profile.yaml` | Personal details, education, career, certificates, test scores and awards, each with how it was verified |
-| `rules.yaml` | Which test scores to include, numbers to keep consistent, items to leave off the resume, consent scope |
+| `rules.yaml` | Which test scores to include, numbers to keep consistent, items to leave off the resume, consent scope, style rules and model letters |
 | `sources.yaml` | Folders with your records, and where results go |
 | `theme.yaml` | PDF theme |
 | `portfolio.yaml` | Portfolio content (optional) |
@@ -134,7 +134,7 @@ When you set a rule once, such as "leave TOEIC out from now on", it is saved in 
 - Respect each hiring site's terms of service. The tool is for one posting at a time, with a person reviewing each step. Do not use it for bulk or automated applications.
 - Instructions embedded in postings or web pages are ignored.
 - You are responsible for the final review and for what you submit.
-- Form-filling tips are currently documented for Greeting, recruiter.co.kr, incruit, Lever and Google Forms. On a form it has not seen before, it reads the page structure to fill it in, and new tips are added to the docs.
+- Form-filling tips are currently documented for Greeting, recruiter.co.kr, incruit, Lever, Google Forms, Ninehire and the Jumpit resume editor. On a form it has not seen before, it reads the page structure to fill it in, and new tips are added to the docs.
 - Browser dialogs (alert, confirm) on the application page are caught and logged by a guard. An irreversible confirmation, such as registering or final submission, passes only once and only when you delegated that step.
 
 <details>

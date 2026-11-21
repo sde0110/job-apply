@@ -2,6 +2,7 @@
 
 일부러 망가뜨린 HTML 을 실제 Chrome 으로 인쇄해서 pdf_check 가 잡아내는지 본다.
 (고아 제목, 글자 겹침, 여백 넘침, 한글 대체 폰트, 잘린 글, 빈 쪽, 쪽수 초과, 영문 문서의 한글, 줄 첫머리 가운뎃점)
+엔진이 그리는 구분자에 가운뎃점이 남지 않는지도 본다.
 그리고 엔진 CSS 가 같은 문제를 실제로 막는지(제목 뒤 쪽나눔 금지)도 확인한다.
 
 필요: Google Chrome/Chromium. 없으면 건너뛴다.
@@ -115,6 +116,7 @@ class PdfCheck(unittest.TestCase):
         r = self.check("dot", "<p>예시물류 운영기획팀<br>· 2024.03–2024.08</p>")
         self.assertTrue(any("줄 첫머리" in w for w in r["warns"]), r["warns"])
         self.assertEqual(pdf_base.e("예시물류 · 2024.03"), "예시물류 · 2024.03")
+        self.assertEqual(pdf_base.e("예시물류 / 2024.03"), "예시물류\u00a0/ 2024.03")
 
 
 class Themes(unittest.TestCase):
@@ -173,6 +175,35 @@ class Awards(unittest.TestCase):
         html = render_resume.Resume(data, prof, rules()).html()
         self.assertIn("사용자확인 경진대회", html)
         self.assertNotIn("이차자료 경진대회", html)
+
+
+class Separators(unittest.TestCase):
+    """엔진이 만드는 구분자는 가운뎃점 대신 ' / '와 ', ' (사용자 결정 2026-11-22)."""
+
+    @staticmethod
+    def text(html: str) -> str:
+        import re
+
+        return re.sub(r"<style.*?</style>|<[^>]+>", " ", html, flags=re.S)
+
+    def test_example_pdfs_have_no_middle_dot(self):
+        import yaml
+
+        import render_letter
+        import render_resume
+
+        app = SKILL / "examples" / "hong-gildong" / "application"
+        for name in ("resume.yaml", "resume_en.yaml"):
+            html = render_resume.build_html(yaml.safe_load((app / name).read_text(encoding="utf-8")))
+            self.assertNotIn("·", self.text(html), name)
+        html = render_letter.build_html(yaml.safe_load((app / "letter.yaml").read_text(encoding="utf-8")),
+                                        (app / "final_coverletter.md").read_text(encoding="utf-8"))
+        self.assertNotIn("·", self.text(html))
+        self.assertIn("예시물류</span>\u00a0/ ", html)
+
+    def test_old_middle_dot_meta_is_drawn_with_slash(self):
+        self.assertEqual(pdf_base.meta_line("회사 · 2024.03 / 팀 프로젝트"),
+                         '<span class="seg">회사</span>\u00a0/ <span class="seg">2024.03</span>\u00a0/ <span class="seg">팀 프로젝트</span>')
 
 
 class AutoForbid(unittest.TestCase):

@@ -3,7 +3,7 @@
 
 사용: python3 run_example.py [작업폴더]   (기본: 임시 폴더)
 
-순서: setup_init --example → doctor → profile_check → init_output → build_pdfs(국문 이력서·영문 1쪽 이력서·자기소개서
+순서: setup_init --example → doctor → profile_check → init_output → style_check(문체 규칙) → build_pdfs(국문 이력서·영문 1쪽 이력서·자기소개서
      렌더 + 자동 검증) → 규칙 적용 확인(미확인 수상 제외, 웹 답변이 PDF 에 안 들어감, 어학 정책, 영문 라벨)
 지원서 화면 입력(브라우저)은 이 스크립트 범위 밖이다.
 종료 코드: 0 = 모두 통과
@@ -52,6 +52,8 @@ def main():
     resume = app / "홍길동_그린데이터_데이터엔지니어_이력서.pdf"
     letter = app / "홍길동_그린데이터_데이터엔지니어_자기소개서.pdf"
     resume_en = app / "Hong_Gildong_GreenData_Data_Engineer_Resume.pdf"
+    fails += run([SCRIPTS / "style_check.py", app / "final_coverletter.md", app / "resume.yaml", app / "resume_en.yaml",
+                  app / "letter.yaml"], env).returncode != 0
     fails += run([SCRIPTS / "build_pdfs.py", app, "--forbid", "예시상사"], env).returncode != 0
     for name in ("resume", "resume_en", "letter"):
         src = app / "_build" / f"{name}.png"

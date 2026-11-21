@@ -1,6 +1,6 @@
 {
   "name": "job-apply",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "채용 공고·지원서 링크로 맞춤 이력서·자기소개서 PDF와 지원서 답변을 만들고, 사실·윤문·PDF를 검증한 뒤 지원서 화면에 입력(제출 직전까지)하는 Claude Code 스킬",
   "author": {"name": "sde0110", "url": "https://github.com/sde0110"},
   "homepage": "https://github.com/sde0110/job-apply",

@@ -4,7 +4,7 @@
 사용: python3 profile_check.py [--quiet]
 
 - profile.yaml: 필수 키, 날짜 형식(YYYY-MM 또는 YYYY-MM-DD), verified 값, 경력·학력·자격·수상 필드
-- rules.yaml: 허용된 값인지 (scope, humanize, pdf_check, 어학 정책, 동의)
+- rules.yaml: 허용된 값인지 (scope, humanize, pdf_check, 어학 정책, 동의, 문체 style)
 - sources.yaml: base 와 key_files 경로가 실제로 있는지
 - 원본으로 확인되지 않은 사실(2차·부분·미확인)을 목록으로 보여 준다 — 지원서에 쓰기 전에 확인할 것
 
@@ -25,6 +25,9 @@ SCOPES = {"문안 작성", "입력 및 임시저장", "제출 전까지", "최�
 SWITCH = {"always", "ask", "never"}
 LANG = {"never", "always", "include_unless_expired_forbidden"}
 CONSENT = {"check", "never", "ask"}
+STYLE_LEVEL = {"error", "warn", "off"}
+STYLE_INT = {"heading_min_chars", "long_paragraph", "tech_list", "humanize_min_change"}
+STYLE_LIST = {"examples", "avoid", "allow", "heading_skip"}
 DATE = re.compile(r"^\d{4}(-\d{2}){0,2}$")
 
 errors: list[str] = []
@@ -125,6 +128,25 @@ def check_rules():
             err(f"rules.consent.{k} '{v}' 는 check/never/ask 중 하나")
     if (r.get("defaults") or {}).get("submit") not in (None, "never", "ask"):
         warnings.append("rules.defaults.submit 은 never 를 권장 (제출은 사용자가 직접)")
+    check_style(r.get("style") or {})
+
+
+def check_style(st: dict):
+    for k, v in st.items():
+        if k in {"middle_dot", "team_size", "bracket_heading"}:
+            if v not in STYLE_LEVEL:
+                err(f"rules.style.{k} '{v}' 는 error/warn/off 중 하나")
+        elif k in STYLE_INT:
+            if not isinstance(v, (int, float)) or isinstance(v, bool) or v < 0:
+                err(f"rules.style.{k} '{v}' 는 0 이상의 숫자")
+        elif k in STYLE_LIST:
+            if not isinstance(v, list):
+                err(f"rules.style.{k} 는 목록 ([…])")
+        else:
+            warnings.append(f"rules.style 에서 쓰지 않는 키: {k}")
+    for ex in st.get("examples") or []:
+        if not resolve(str(ex)):
+            warnings.append(f"rules.style.examples 경로 없음: {ex}")
 
 
 def check_sources():
