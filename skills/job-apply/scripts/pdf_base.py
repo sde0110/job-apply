@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import html
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -24,8 +25,8 @@ _theme_override: str | None = None  # 렌더러의 --theme 옵션
 
 
 def e(s) -> str:
-    """HTML 이스케이프 + ' · ' 앞 줄바꿈 금지 (줄이 가운뎃점으로 시작하지 않게)."""
-    return html.escape(str(s)).replace(" · ", "\u00a0· ")
+    """HTML 이스케이프 + ' / '·' · ' 앞 줄바꿈 금지 (줄이 구분자로 시작하지 않게)."""
+    return html.escape(str(s)).replace(" / ", "\u00a0/ ").replace(" · ", "\u00a0· ")
 
 
 def presets() -> list[str]:
@@ -51,9 +52,9 @@ def colors() -> dict:
 
 
 LABELS = {
-    "ko": {"present": "현재", "experience": "경력", "skills": "기술", "education": "학력 · 교육 · 자격", "awards": "수상",
+    "ko": {"present": "현재", "experience": "경력", "skills": "기술", "education": "학력, 교육, 자격", "awards": "수상",
            "resume": "이력서", "hours": "{h}시간 수료", "preferred": "우대", "requirements": "자격요건과 경험"},
-    "en": {"present": "Present", "experience": "Experience", "skills": "Skills", "education": "Education · Training · Certifications",
+    "en": {"present": "Present", "experience": "Experience", "skills": "Skills", "education": "Education, Training, Certifications",
            "awards": "Awards", "resume": "Resume", "hours": "{h} hours", "preferred": "Preferred", "requirements": "Requirements and evidence"},
 }
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
@@ -281,7 +282,7 @@ def page_css(label: str, lang: str = "ko") -> str:
     foot = colors().get("foot", "#a3a9b2")
     return f"""
 @page{{size:A4;margin:14mm 16mm 15mm;
-  @bottom-left{{content:"{name} · {label}";font-family:'Pretendard';font-size:6.8pt;color:{foot};letter-spacing:.02em}}
+  @bottom-left{{content:"{name} / {label}";font-family:'Pretendard';font-size:6.8pt;color:{foot};letter-spacing:.02em}}
   @bottom-right{{content:counter(page) " / " counter(pages);font-family:'Pretendard';font-size:6.8pt;color:{foot}}}
 }}
 """
@@ -336,10 +337,11 @@ def link(path: str) -> str:
 
 
 def meta_line(text: str) -> str:
-    """'회사 · 팀(기여도 40%) · 2026.06–08' 같은 메타 줄: 짧은 조각은 줄바꿈으로 쪼개지 않고 가운뎃점 뒤에서만 바꾼다."""
-    segs = [html.escape(x) for x in str(text).split(" · ")]
+    """'회사 / 팀 프로젝트 / 2026.06–08' 같은 메타 줄: 짧은 조각은 줄바꿈으로 쪼개지 않고 구분자 뒤에서만 바꾼다.
+    예전 데이터의 ' · ' 구분자도 ' / '로 바꿔 그린다."""
+    segs = [html.escape(x) for x in re.split(r"\s+[·/]\s+", str(text))]
     segs = [f'<span class="seg">{x}</span>' if len(x) <= 14 else x for x in segs]
-    return "\u00a0· ".join(segs)
+    return "\u00a0/ ".join(segs)
 
 
 def section(rail, rail_meta, inner) -> str:

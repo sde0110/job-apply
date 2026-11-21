@@ -6,3 +6,11 @@ exclude_from_resume_and_letter: []
 never_claim_without_new_evidence: [Kubernetes 운영]
 consent: {required: check, optional_collection: ask, sensitive_required: ask, third_party: never}
 experience_questions: {product_trial: ask}
+style:
+  examples: []                 # 사용자가 좋다고 한 글 경로. 초안 전에 읽고 문체를 맞춘다
+  middle_dot: error
+  team_size: error
+  bracket_heading: error
+  long_paragraph: 350
+  tech_list: 5
+  humanize_min_change: 3

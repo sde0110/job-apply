@@ -9,7 +9,7 @@ portfolio.yaml 구조
 - pages[]: 프로젝트 한 쪽씩 (eyebrow, title "주제목 | 부제", meta "a | b", slug, blocks[])
   blocks 종류: metric [큰 글씨, 설명] / intro 문단 / figure {src, max_h(mm), caption}
                blk [소제목, 본문] / flow [단계, "윗줄\\n아랫줄"] / split {figure, subs[[소제목, 본문]]}
-               part {label, title, blocks[txt|flow|metric]} / divider / foot {stack "a · b", award, links[[slug, 글]]}
+               part {label, title, blocks[txt|flow|metric]} / divider / foot {stack "a, b", award, links[[slug, 글]]}
 - appendix: 부록 (paper, awards[[날짜, 내용]], education[[날짜, 내용]], extra_projects[[slug, 이름, 설명]])
 - site: 프로젝트 상세 링크 기준 URL ({site}/projects/{slug}.html), images: 그림 기준 폴더
 """
@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -79,7 +80,7 @@ class Builder:
         award = f'<p class="award">{e(f["award"])}</p>' if f.get("award") else ""
         chips = ""
         if f.get("stack"):
-            chips = '<ul class="chips">' + "".join(f"<li>{e(x)}</li>" for x in f["stack"].split(" · ")) + "</ul>"
+            chips = '<ul class="chips">' + "".join(f"<li>{e(x)}</li>" for x in re.split(r"\s*,\s*|\s+[·/]\s+", f["stack"]) if x) + "</ul>"
         links = ""
         if f.get("links"):
             links = '<p class="links">' + "".join(
@@ -120,7 +121,7 @@ class Builder:
     def cover(self):
         c = self.d["cover"]
         toc = "".join(f'<li><span class="no">{e(t["no"])}</span><div><b>{e(t["title"])}</b><span>{e(t["desc"])}</span></div></li>' for t in c["toc"])
-        career = "".join(f'<li><span class="when num">{e(r["when"])}</span><div><b>{e(r["name"])}</b> <i>· {e(r["role"])}</i></div></li>' for r in c["career"])
+        career = "".join(f'<li><span class="when num">{e(r["when"])}</span><div><b>{e(r["name"])}</b>\u00a0<i>/ {e(r["role"])}</i></div></li>' for r in c["career"])
         skills = "".join(f'<li class="plain">{e(s)}</li>' for s in c["skills"])
         return self.pg(f"""
 <div class="head">
@@ -161,7 +162,7 @@ class Builder:
         xp = "".join(f'<li><a href="{self.url(s)}">{e(n)}</a><span>{e(d)}</span></li>' for s, n, d in a["extra_projects"])
         return self.pg(
             self.head({"eyebrow": a["eyebrow"], "title": a["title"], "meta": a["meta"]})
-            + f'<div class="ap">{paper}<h2>주요 수상</h2>{rows(a["awards"])}<h2>학력 · 교육 · 자격</h2>{rows(a["education"])}'
+            + f'<div class="ap">{paper}<h2>주요 수상</h2>{rows(a["awards"])}<h2>학력, 교육, 자격</h2>{rows(a["education"])}'
             + f'<h2>추가 프로젝트</h2><ul class="xp">{xp}</ul></div>'
             + f'<div class="foot" style="margin-top:9mm;font-size:8.6pt;color:var(--ink)">{self.contact}</div>'
         )
