@@ -68,6 +68,8 @@ It asks only what your records cannot answer, such as your start date or how you
 
 Even after the PDFs pass, it opens a preview image and fixes awkward line breaks and empty space.
 
+At the end it scores the whole application folder with `score_app.py` and reports the score and any remaining failures. After changing the skill, score real application sessions with `score_session.py` and the writing stage with the `claude plugin eval` cases to compare before and after. See [docs/grading.md](docs/grading.md) (Korean).
+
 ## PDFs
 
 The documents are laid out in HTML and CSS and printed with Chrome, in Pretendard with a single accent color. It can produce:
@@ -146,6 +148,7 @@ python3 -m pip install -r requirements.txt
 ln -s "$PWD/skills/job-apply" ~/.claude/skills/job-apply
 python3 -m unittest discover -s tests -v
 python3 docs/make_images.py      # regenerate README images
+claude plugin eval . --scaffold --allow-tools Write Edit --runs 1   # writing-stage evals (uses your Claude usage)
 ```
 
 - PDF and form tests need Chrome and are skipped without it.

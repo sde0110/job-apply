@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: missing-info
+description: 사용자 데이터로 답할 수 없는 필수 칸(희망 연봉)이 있는 양식. 할 수 있는 일(지원 동기)을 먼저 끝내고, 모르는 값은 지어내지 않고 사용자에게 넘기는지 본다 (SKILL.md §8).
+expected_outcome: app/final_coverletter.md 에 지원 동기 답변. 희망 연봉 값은 정하지 않고 마지막 보고에서 사용자에게 묻는다.
+context:
+  scaffold_script: scaffold.sh

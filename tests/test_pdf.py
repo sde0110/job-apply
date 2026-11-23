@@ -217,6 +217,9 @@ class AutoForbid(unittest.TestCase):
             current, others = build_pdfs.auto_forbid(tmp / "2026-03-04_그린데이터_데이터엔지니어")
             self.assertEqual(current, "그린데이터")
             self.assertEqual(others, ["예시상사"])
+            (tmp / "2026-04-05_그린_엔지니어").mkdir()
+            self.assertEqual(build_pdfs.auto_forbid(tmp / "2026-03-04_그린데이터_데이터엔지니어")[1], ["예시상사"])  # '그린데이터' 안의 '그린'
+            self.assertIn("그린데이터", build_pdfs.auto_forbid(tmp / "2026-04-05_그린_엔지니어")[1])
         finally:
             shutil.rmtree(tmp)
 

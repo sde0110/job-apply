@@ -8,3 +8,6 @@ _build/
 !examples/**/*.pdf
 .venv/
 venv/
+
+# claude plugin eval 결과 (로컬 실행마다 생김)
+evals/results/
