@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: letter-basic
+description: 가상 인물(홍길동)과 예제 공고로 웹 답변 두 개를 쓴다. 사실, 고정 수치, 문체 규칙(가운뎃점, 팀 인원수, [소제목])을 본다.
+expected_outcome: app/final_coverletter.md 에 '## [웹 답변]' 두 문항. 근거 없는 경험과 팀 인원수 없음, 업무 경험 답변은 [소제목]으로 시작.
+context:
+  scaffold_script: scaffold.sh

@@ -37,7 +37,8 @@ def auto_forbid(folder: Path) -> tuple[str | None, list[str]]:
     others = set()
     for d in folder.parent.iterdir():
         mm = APP_DIR.match(d.name)
-        if d.is_dir() and d != folder and mm and mm.group(1) != current:
+        # 이번 회사명 안에 든 짧은 이름('그린데이터' 지원의 '그린')은 이번 회사명과 가릴 수 없어 뺀다
+        if d.is_dir() and d != folder and mm and mm.group(1) != current and not (current and mm.group(1) in current):
             others.add(mm.group(1))
     return current, sorted(others)
 

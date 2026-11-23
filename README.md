@@ -62,6 +62,8 @@ flowchart LR
 
 PDF 검사를 통과해도 미리보기 이미지를 한 번 더 열어 보고, 어색한 줄바꿈이나 빈 공간을 고칩니다.
 
+마지막에는 지원 폴더 전체를 `score_app.py`로 채점해 점수와 남은 실패 항목을 보고합니다. 스킬을 고친 뒤에는 실제 지원 기록을 `score_session.py`로, 글쓰기 단계를 `claude plugin eval` 케이스로 채점해 전후를 비교합니다. 방법은 [docs/grading.md](docs/grading.md)에 있습니다.
+
 ## PDF
 
 HTML과 CSS로 짜고 Chrome으로 인쇄합니다. 글꼴은 Pretendard이고, 강조색은 하나만 씁니다. 국문 이력서와 1쪽 이력서, 영문 이력서, 자기소개서·경력기술서, 포트폴리오를 만들 수 있습니다.
@@ -136,14 +138,15 @@ python3 <플러그인 폴더>/skills/job-apply/scripts/run_example.py
 skills/job-apply/
   SKILL.md               지원 흐름
   references/            초기 설정, 데이터 형식, PDF, 양식별 입력 요령
-  scripts/               자료 목록, 텍스트 추출, 글자 수, 문체 검사, PDF 렌더와 자동 판정, 환경 점검, 양식 대조
+  scripts/               자료 목록, 텍스트 추출, 글자 수, 문체 검사, PDF 렌더와 자동 판정, 환경 점검, 양식 대조, 채점
   scripts/browser/       지원서 화면 점검, 알림창 가드 스니펫
   templates/             데이터·결과물 템플릿
   assets/                Pretendard 글꼴, 테마 프리셋
   examples/hong-gildong/ 가상 인물 예제
   testbed/               채용 사이트의 까다로운 동작을 흉내 낸 로컬 테스트 양식
-tests/                   스모크, PDF 판정, 테스트 양식 회귀 테스트
-docs/                    README 그림과 그림을 만드는 스크립트
+tests/                   스모크, PDF 판정, 테스트 양식, 채점 도구 테스트
+evals/                   claude plugin eval 케이스(가상 인물, 함정 공고)
+docs/                    채점 방법, README 그림과 그림을 만드는 스크립트
 ```
 
 </details>
@@ -158,6 +161,7 @@ ln -s "$PWD/skills/job-apply" ~/.claude/skills/job-apply   # 개발 중에는 /j
 python3 -m unittest discover -s tests -v
 python3 skills/job-apply/scripts/serve_testbed.py           # 로컬 테스트 양식 http://127.0.0.1:8791/
 python3 docs/make_images.py                                 # README 그림 다시 만들기
+claude plugin eval . --scaffold --allow-tools Write Edit --runs 1   # 글쓰기 회귀 시험 (사용량을 씀)
 ```
 
 - PDF와 테스트 양식 테스트에는 Chrome이 필요합니다(없으면 건너뜁니다). 컨테이너처럼 Chrome 샌드박스를 못 쓰는 곳에서는 `JOB_APPLY_CHROME_FLAGS=--no-sandbox`를 설정하세요.

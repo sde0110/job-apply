@@ -4,7 +4,7 @@
 사용: python3 run_example.py [작업폴더]   (기본: 임시 폴더)
 
 순서: setup_init --example → doctor → profile_check → init_output → style_check(문체 규칙) → build_pdfs(국문 이력서·영문 1쪽 이력서·자기소개서
-     렌더 + 자동 검증) → 규칙 적용 확인(미확인 수상 제외, 웹 답변이 PDF 에 안 들어감, 어학 정책, 영문 라벨)
+     렌더 + 자동 검증) → 규칙 적용 확인(미확인 수상 제외, 웹 답변이 PDF 에 안 들어감, 어학 정책, 영문 라벨) → score_app(결과물 채점)
 지원서 화면 입력(브라우저)은 이 스크립트 범위 밖이다.
 종료 코드: 0 = 모두 통과
 """
@@ -89,6 +89,7 @@ def main():
     for label, ok in checks:
         print(f"[{'통과' if ok else '실패'}] {label}")
         fails += not ok
+    fails += run([SCRIPTS / "score_app.py", app], env).returncode != 0
 
     print(f"\n작업 폴더: {work}")
     print("결과:", "모두 통과" if not fails else f"실패 {fails}건")

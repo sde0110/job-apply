@@ -90,7 +90,7 @@
 ## 점핏 이력서 (jumpit.saramin.co.kr/resume/<id> — 채용 플랫폼 이력서 편집기)
 
 - 한 페이지 편집기. 입력 중 "임시 저장되었습니다"가 뜨지만, 마지막에 **저장하기**를 누르고 새로고침해 값을 다시 읽는다. 포지션 지원은 별도 단계라 누르지 않는다.
-- 입력란 값은 `main input, main textarea`의 `name`으로 읽는다(`careers.0.jobDetailInfo`, `projects.N.projectDetailInfo`, `etcHistories.N.etcName` 등). 타이틀 30자 제한, 장문 칸은 제한 없음.
+- 입력란 값은 `main input, main textarea`의 `name`으로 읽는다(`careers.0.jobDetailInfo`, `projects.N.projectDetailInfo`, `etcHistories.N.etcName` 등). 타이틀 30자 제한·쉼표 등 특수문자 불가(저장 시 "사용할 수 없는 특수문자를 제거해주세요"), 자기소개서 제목은 쉼표 가능, 장문 칸은 제한 없음.
 - 왼쪽 "항목편집" 토글로 기타사항·자기소개서 섹션을 켠다.
 - 날짜는 `YYYY`·`MM` 칸을 각각 클릭해 입력(자동으로 다음 칸으로 넘어가지 않음). 수상·자격은 시작=종료 같은 달로 넣는다.
 - 기술 태그: 검색창에 입력 → 목록 항목 클릭. **목록이 이전 검색어 결과로 남아 있는 경우가 있어** 엉뚱한 태그가 들어간다 → 마지막 글자를 지웠다 다시 쳐서 목록을 갱신하고 스크린샷으로 확인 후 클릭. Claude, LangChain, Pydantic, Vitest 는 목록에 없다.

@@ -1,0 +1,7 @@
+schema_version: "1.1"
+name: judge-calibration
+description: 채점기 점검. 에이전트는 아무것도 하지 않고, 판정 모델이 좋은 예(예제 확정본)는 통과시키고 나쁜 예(_fixtures/bad_final.md)는 떨어뜨리는지 본다. letter-basic 의 quality 기준과 같은 글을 쓴다.
+expected_outcome: 두 채점 모두 통과 (good 은 기준을 지킴, bad 는 기준을 어김으로 판정)
+tags: [calibration]
+context:
+  scaffold_script: scaffold.sh
